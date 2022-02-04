@@ -32,8 +32,6 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Create
         public async Task<Response<int>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             var data = _mapper.Map<Category>(request);
-            data.UserIn = "System";
-            data.DateIn = DateTime.Now;
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int) HttpStatusCode.Created };
         }

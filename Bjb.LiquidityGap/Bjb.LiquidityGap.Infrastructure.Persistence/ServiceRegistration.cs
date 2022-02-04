@@ -1,5 +1,6 @@
 ﻿using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Infrastructure.Persistence.Repositories;
+using Bjb.LiquidityGap.Infrastructure.Persistence.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
            );
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            services.AddTransient<ILogService, LogService>();
             #endregion
         }
         public static IApplicationBuilder PerformAppMigration(this IApplicationBuilder app)

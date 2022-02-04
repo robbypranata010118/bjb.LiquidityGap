@@ -11,6 +11,7 @@ namespace Bjb.LiquidityGap.Domain.Common
         public TKey Id { get; set; }
         public bool IsActive { get; set; }
         [MaxLength(50)]
+        [Required]
         public string UserIn { get; set; }
         public DateTime DateIn { get; set; }
         [MaxLength(50)]

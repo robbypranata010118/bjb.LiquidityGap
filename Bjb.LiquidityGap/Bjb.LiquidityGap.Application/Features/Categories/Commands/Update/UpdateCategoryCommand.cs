@@ -36,8 +36,6 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Update
             }
             data.Code = request.Code;
             data.Name = request.Name;
-            data.DateUp = DateTime.Now;
-            data.UserUp = "SYSTEM";
             await _genericRepository.UpdateAsync(data);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }

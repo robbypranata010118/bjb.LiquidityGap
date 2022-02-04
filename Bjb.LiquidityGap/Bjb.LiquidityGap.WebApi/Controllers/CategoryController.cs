@@ -5,6 +5,7 @@ using Bjb.LiquidityGap.Application.Features.Categories.Queries.Get;
 using Bjb.LiquidityGap.Application.Features.Categories.Queries.GetById;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.WebApi.Controllers
 {
+    [Authorize]
     public class CategoryController : BaseApiController
     {
         /// <remarks>

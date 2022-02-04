@@ -4,6 +4,7 @@ using Bjb.LiquidityGap.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220204174419_AddTableAuditTrail")]
+    partial class AddTableAuditTrail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +73,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -83,8 +84,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("AuditTrails");
                 });
@@ -115,7 +114,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -128,8 +126,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("Categories");
                 });
@@ -164,7 +160,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -177,8 +172,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("Characteristics");
                 });
@@ -213,7 +206,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -224,8 +216,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CharacteristicId");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("CharacteristicFormula");
                 });
@@ -263,7 +253,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -274,8 +263,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CharactericticId");
-
-                    b.HasIndex("IsActive");
 
                     b.HasIndex("TimebucketId");
 
@@ -311,7 +298,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("decimal(18,0)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -320,8 +306,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("Currencies");
                 });
@@ -353,7 +337,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -362,8 +345,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("DataSources");
                 });
@@ -401,7 +382,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -410,8 +390,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.HasIndex("SheetItemId");
 
@@ -454,7 +432,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -463,8 +440,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.HasIndex("LiquidityGapId");
 
@@ -515,7 +490,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -526,8 +500,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DataSourceId");
-
-                    b.HasIndex("IsActive");
 
                     b.HasIndex("SheetItemParentId");
 
@@ -560,7 +532,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -571,8 +542,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CharacteristicId");
-
-                    b.HasIndex("IsActive");
 
                     b.HasIndex("SheetItemId");
 
@@ -608,7 +577,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -619,8 +587,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("SubCategories");
                 });
@@ -657,7 +623,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -666,8 +631,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("SummarySources");
                 });
@@ -699,7 +662,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserIn")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -708,8 +670,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsActive");
 
                     b.ToTable("Timebucket");
                 });

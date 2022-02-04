@@ -1,4 +1,5 @@
-﻿using Bjb.LiquidityGap.Application.Behaviours;
+﻿using bjb.util.uim;
+using Bjb.LiquidityGap.Application.Behaviours;
 using Bjb.LiquidityGap.Base.Interfaces;
 using FluentValidation;
 using MediatR;
@@ -19,6 +20,7 @@ namespace Bjb.LiquidityGap.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("id");
             services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddTechRedemptionUtilUim(configuration);
         }
     }
 }

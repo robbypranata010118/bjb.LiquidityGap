@@ -1,8 +1,11 @@
-﻿using Bjb.LiquidityGap.Base.Extensions;
+﻿using Bjb.LiquidityGap.Application;
+using Bjb.LiquidityGap.Base.Dtos.AuditTrails;
+using Bjb.LiquidityGap.Base.Extensions;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Parameters;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Common;
+using Bjb.LiquidityGap.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -18,6 +21,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
     {
         private readonly AppDBContext _dbContext;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ILogService _logService;
         private bool _isDeactivable = typeof(IDeactivable).IsAssignableFrom(typeof(T));
         private bool _isSoftDelete = typeof(ISoftDelete).IsAssignableFrom(typeof(T));
         private bool _isAuditable = typeof(IAuditable).IsAssignableFrom(typeof(T));
@@ -26,10 +30,11 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         private bool _isAudit = typeof(IAudit).IsAssignableFrom(typeof(T));
 
         public GenericRepositoryAsync(AppDBContext dbContext,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService, ILogService logService)
         {
             _dbContext = dbContext;
             _currentUserService = currentUserService;
+            _logService = logService;
         }
 
         public virtual async Task<T> GetByIdAsync(int id, string idFieldName = "Id", string[] includes = null)
@@ -122,63 +127,38 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
             //{
             //    (entity as ISoftDelete).IsDeleted = false;
             //}
-
+            await _dbContext.Set<T>().AddAsync(entity);
             if (_isAudit)
             {
-                (entity as IAudit).UserIn = _currentUserService.UserName;
+                AuditTrailRequest log = new AuditTrailRequest
+                {
+                    Id = Guid.NewGuid(),
+                    Action = Constant.ACTION_INSERT,
+                    ApplicationName = Constant.NAMA_APLIKASI,
+                    Detail = "",
+                    Feature = (entity as IAuditable).FeatureName,
+                    LogDate = DateTime.Now,
+                    Message = "Success",
+                    Module = (entity as IAuditable).ModuleName,
+                    ReferenceId = (entity as IEntity<int>)?.Id.ToString() ?? "0000000000",
+                    RoleId = _currentUserService.IdFungsi,
+                    RoleName = _currentUserService.IdFungsi,
+                    UserId = _currentUserService.UserId,
+                    UserName = _currentUserService.UserName,
+                    
+                };
+                await _logService.InsertLog(log);
+                (entity as IAudit).UserIn = _currentUserService.UserId;
                 (entity as IAudit).DateIn = DateTime.Now;
 
             }
-            await _dbContext.Set<T>().AddAsync(entity);
+            
             await _dbContext.SaveChangesAsync();
-            return entity;
-        }
-        public async Task<T> AddAsync(T entity, bool preventSave)
-        {
-            if (_isDeactivable)
-            {
-                (entity as IDeactivable).IsActive = true;
-            }
-            if (_isSoftDelete)
-            {
-                (entity as ISoftDelete).IsDeleted = false;
-            }
-            if (_isAudit)
-            {
-                (entity as IAudit).UserIn = _currentUserService.UserName;
-                (entity as IAudit).DateIn = DateTime.Now;
-
-            }
-            await _dbContext.Set<T>().AddAsync(entity);
-            if (!preventSave)
-            {
-                await _dbContext.SaveChangesAsync();
-            }
             return entity;
         }
         public async Task SaveChangeAsync()
         {
             await _dbContext.SaveChangesAsync();
-        }
-        public T Add(T entity)
-        {
-            if (_isDeactivable)
-            {
-                (entity as IDeactivable).IsActive = true;
-            }
-            if (_isSoftDelete)
-            {
-                (entity as ISoftDelete).IsDeleted = false;
-            }
-            if (_isAudit)
-            {
-                (entity as IAudit).UserIn = _currentUserService.UserName;
-                (entity as IAudit).DateIn = DateTime.Now;
-
-            }
-            _dbContext.Set<T>().Add(entity);
-            _dbContext.SaveChanges();
-            return entity;
         }
         public async Task<List<T>> AddRangeAsync(List<T> entities)
         {
@@ -200,7 +180,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                 }
                 if (_isAudit)
                 {
-                    (entity as IAudit).UserIn = _currentUserService.UserName;
+                    (entity as IAudit).UserIn = _currentUserService.UserId;
                     (entity as IAudit).DateIn = DateTime.Now;
 
                 }
@@ -211,42 +191,66 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         }
         public async Task UpdateAsync(T entity)
         {
-            if (_isAudit)
-            {
-                (entity as IAudit).UserUp = _currentUserService.UserName;
-                (entity as IAudit).DateUp = DateTime.Now;
-            }
             _dbContext.Attach(entity);
             EntityEntry entry = _dbContext.Entry(entity);
             entry.State = EntityState.Modified;
             _dbContext.Set<T>().Update(entity);
+            if (_isAudit)
+            {
+                (entity as IAudit).UserUp = _currentUserService.UserId;
+                (entity as IAudit).DateUp = DateTime.Now;
+               
+                AuditTrailRequest log = new AuditTrailRequest
+                {
+                    Id = Guid.NewGuid(),
+                    Action = Constant.ACTION_UPDATE,
+                    ApplicationName = Constant.NAMA_APLIKASI,
+                    Detail = "",
+                    Feature = (entity as IAuditable).FeatureName,
+                    LogDate = DateTime.Now,
+                    Message = "Success",
+                    Module = (entity as IAuditable).ModuleName,
+                    ReferenceId = (entity as IEntity<int>)?.Id.ToString() ?? "0000000000",
+                    RoleId = _currentUserService.IdFungsi,
+                    RoleName = _currentUserService.IdFungsi,
+                    UserId = _currentUserService.UserId,
+                    UserName = _currentUserService.UserName
+                };
+                await _logService.InsertLog(log);               
+            }
             await _dbContext.SaveChangesAsync();
         }
         public async Task UpdateRangeAsync(List<T> entities)
         {
-            _dbContext.UpdateRange(entities);
             foreach (var entity in entities)
             {
+                _dbContext.UpdateRange(entities);
                 if (_isAudit)
                 {
-                    (entity as IAudit).UserUp = _currentUserService.UserName;
+
+                    AuditTrailRequest log = new AuditTrailRequest
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = Constant.ACTION_INSERT,
+                        ApplicationName = Constant.NAMA_APLIKASI,
+                        Detail = "",
+                        Feature = (entity as IAuditable).FeatureName,
+                        LogDate = DateTime.Now,
+                        Message = "Success",
+                        Module = (entity as IAuditable).ModuleName,
+                        ReferenceId = (entity as IEntity<int>)?.Id.ToString() ?? "0000000000",
+                        RoleId = _currentUserService.IdFungsi,
+                        RoleName = _currentUserService.IdFungsi,
+                        UserId = _currentUserService.UserId,
+                        UserName = _currentUserService.UserName
+                    };
+                    await _logService.InsertLog(log);
+                    (entity as IAudit).UserUp = _currentUserService.UserId;
                     (entity as IAudit).DateUp = DateTime.Now;
                 }
             }
+            
             await _dbContext.SaveChangesAsync();
-        }
-        public void UpdateRange(List<T> entities)
-        {
-            foreach (var entity in entities)
-            {
-                if (_isAudit)
-                {
-                    (entity as IAudit).UserUp = _currentUserService.UserName;
-                    (entity as IAudit).DateUp = DateTime.Now;
-                }
-            }
-            _dbContext.UpdateRange(entities);
-            _dbContext.SaveChanges();
         }
         public async Task DeleteRangeAsync(List<T> entities)
         {
