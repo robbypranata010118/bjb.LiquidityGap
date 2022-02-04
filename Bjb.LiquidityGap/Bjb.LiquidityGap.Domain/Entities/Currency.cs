@@ -1,20 +1,25 @@
 ﻿using Bjb.LiquidityGap.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.Domain.Entities
 {
-    public class Category : BaseEntity<int>, IAuditable, IDeactivable
+    public class Currency : BaseEntity<int>, IAuditable, IDeactivable
     {
-        [MaxLength(10)]
+        [MaxLength(3)]
         public string Code { get; set; }
-        [MaxLength(100)]
+        [MaxLength(150)]
         public string Name { get; set; }
+        [Column(TypeName = "decimal(18,0)")]
+        public decimal Rate { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]
-        public string FeatureName { get; set; } = "Sub Category";
-        public virtual ICollection<SubCategory> SubCategories { get; set; }
+        public string FeatureName { get; set; } = "Currency";
     }
 }
