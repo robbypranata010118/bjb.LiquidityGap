@@ -15,7 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Interfaces\ILogService.cs" />
     <Compile Remove="Interfaces\INotificationService.cs" />
     <Compile Remove="Interfaces\IRolePermissionService.cs" />
     <Compile Remove="Interfaces\IRoleService.cs" />

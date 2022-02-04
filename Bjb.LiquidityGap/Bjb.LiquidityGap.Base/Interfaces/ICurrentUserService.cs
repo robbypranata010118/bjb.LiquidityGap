@@ -10,14 +10,6 @@ namespace Bjb.LiquidityGap.Base.Interfaces
     {
         public string UserId { get; }
         public string UserName { get; }
-        public string Fullname { get; set; }
-        public string UnitOfWork { get; set; }
-        public string UnitOfWorkName { get; set; }
-        public string JobPosition { get; set; }
-        public string JobPositionName { get; set; }
-        public string RoleId { get; set; }
-        public string RoleName { get; set; }
-        public string GradeId { get; set; }
-        public string GradeName { get; set; }
+        public string IdFungsi { get; set; }
     }
 }

@@ -22,14 +22,11 @@ namespace Bjb.LiquidityGap.Base.Interfaces
         Task<PagedRepositoryResponse<IReadOnlyList<T>>> GetPagedReponseAsync(IRequestParameter request, string[] includes = null);
         Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize);
         Task<T> AddAsync(T entity);
-        Task<T> AddAsync(T entity, bool preventSave);
         Task SaveChangeAsync();
-        T Add(T entity);
         Task<List<T>> AddRangeAsync(List<T> entities);
         List<T> AddRange(List<T> entities);
         Task UpdateAsync(T entity);
         Task UpdateRangeAsync(List<T> entities);
-        void UpdateRange(List<T> entities);
         Task DeleteAsync(T entity);
         Task DeleteRangeAsync(List<T> entities);
         void DeleteRange(List<T> entities);

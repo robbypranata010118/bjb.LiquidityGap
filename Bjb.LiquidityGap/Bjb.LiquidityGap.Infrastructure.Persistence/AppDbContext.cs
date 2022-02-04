@@ -1,5 +1,11 @@
-﻿using Bjb.LiquidityGap.Domain.Entities;
+﻿using Bjb.LiquidityGap.Domain.Common;
+using Bjb.LiquidityGap.Domain.Configurations;
+using Bjb.LiquidityGap.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Bjb.LiquidityGap.Infrastructure.Persistence
 {
@@ -17,8 +23,10 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
         public virtual DbSet<SheetItemCharacteristic> SheetItemCharacteristics { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<SummarySource> SummarySources { get; set; }
+        public virtual DbSet<AuditTrail> AuditTrails { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyBaseEntityConfiguration();
             builder.Entity<Category>()
                 .HasIndex(u => u.Code)
                 .IsUnique();
