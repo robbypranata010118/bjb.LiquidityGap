@@ -15,7 +15,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]
-        public string FeatureName { get; set; } = "Category";
+        public string FeatureName { get; set; } = "Sub Category";
         public virtual Category Category { get; set; }
     }
 }
