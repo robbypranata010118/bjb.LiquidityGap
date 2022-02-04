@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Application.Exceptions;
+using Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Entities;
@@ -12,30 +13,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete
+namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Delete
 {
-    public class DeleteCategoryCommand : IRequest<Response<Unit>>
+    public class DeleteSubCategoryCommand : IRequest<Response<Unit>>
     {
         public int Id { get; set; }
     }
-
-    public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<Unit>>
+    public class DeleteSubCategoryCommandHandler : IRequestHandler<DeleteSubCategoryCommand, Response<Unit>>
     {
-        private readonly IGenericRepositoryAsync<Category> _genericRepository;
+        private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
         private readonly IMapper _mapper;
 
-        public DeleteCategoryCommandHandler(IGenericRepositoryAsync<Category> genericRepository, IMapper mapper)
+        public DeleteSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
         }
 
-        public async Task<Response<Unit>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Response<Unit>> Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Data kategori tidak ditemukan");
+                throw new ApiException("Data SUB kategori tidak ditemukan");
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);
