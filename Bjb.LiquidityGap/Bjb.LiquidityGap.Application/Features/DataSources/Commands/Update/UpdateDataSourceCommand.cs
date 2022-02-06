@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Application.Exceptions;
-using Bjb.LiquidityGap.Base.Dtos.SubCategories;
+using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Entities;
@@ -13,32 +13,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Update
+namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Update
 {
-    public class UpdateSubCategoryCommand : UpdateSubCategoryRequest, IRequest<Response<Unit>>
+    public class UpdateDataSourceCommand : UpdateDataSourceRequest, IRequest<Response<Unit>>
     {
+
     }
-    
-    public class UpdateSubCategoryCommandHandler : IRequestHandler<UpdateSubCategoryCommand, Response<Unit>>
+    public class UpdateDataSourceCommandHandler : IRequestHandler<UpdateDataSourceCommand, Response<Unit>>
     {
-        private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
+        private readonly IGenericRepositoryAsync<DataSource> _genericRepository;
         private readonly IMapper _mapper;
 
-        public UpdateSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper)
+        public UpdateDataSourceCommandHandler(IGenericRepositoryAsync<DataSource> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
         }
 
-        public async Task<Response<Unit>> Handle(UpdateSubCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Response<Unit>> Handle(UpdateDataSourceCommand request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
             {
-                throw new ApiException("Data sub kategori tidak ditemukan");
+                throw new ApiException("Source data tidak ditemukan");
             }
-            data.Code = request.Code;
             data.Name = request.Name;
+            data.ConnString = request.ConnString;
+            data.UseETL = request.UseEtl;
             await _genericRepository.UpdateAsync(data);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
+using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Domain.Entities;
 
@@ -20,6 +21,12 @@ namespace Bjb.LiquidityGap.Application.Mappings
             CreateMap<UpdateSubCategoryRequest, SubCategory>(); //commands
             CreateMap<SubCategory, SubCategoryResponse>() //Query
             .ForMember(dto => dto.Category, opt => opt.MapFrom(x => x.Category));
+            #endregion
+
+            #region Data Source
+            CreateMap<AddDataSourceRequest, DataSource>(); //commands
+            CreateMap<UpdateDataSourceRequest, DataSource>(); //commands
+            CreateMap<DataSource, DataSourceResponse>(); //Query
             #endregion
         }
     }

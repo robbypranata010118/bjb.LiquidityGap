@@ -13,11 +13,11 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Create
         {
             RuleFor(x => x.Code)
               .NotNull()
-              .MinimumLength(1).WithMessage("{PropertyName} min length 1")
-              .MaximumLength(10).WithMessage("{PropertyName} max length 10");
+              .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
+              .MaximumLength(10).WithMessage("{PropertyName} maksimal karakter 10");
             RuleFor(x => x.Name)
-              .MinimumLength(1).WithMessage("{PropertyName} min length 1")
-              .MaximumLength(100).WithMessage("{PropertyName} max length 100");
+              .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
+              .MaximumLength(100).WithMessage("{PropertyName} maksimal length 100");
         }
     }
 }

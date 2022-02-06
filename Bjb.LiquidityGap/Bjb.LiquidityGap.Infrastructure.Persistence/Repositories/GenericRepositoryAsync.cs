@@ -127,6 +127,8 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
             //{
             //    (entity as ISoftDelete).IsDeleted = false;
             //}
+            (entity as IAudit).UserIn = _currentUserService.UserId;
+            (entity as IAudit).DateIn = DateTime.Now;
             await _dbContext.Set<T>().AddAsync(entity);
             if (_isAudit)
             {
@@ -148,8 +150,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                     
                 };
                 await _logService.InsertLog(log);
-                (entity as IAudit).UserIn = _currentUserService.UserId;
-                (entity as IAudit).DateIn = DateTime.Now;
+                
 
             }
             
@@ -191,14 +192,15 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         }
         public async Task UpdateAsync(T entity)
         {
+            (entity as IAudit).UserUp = _currentUserService.UserId;
+            (entity as IAudit).DateUp = DateTime.Now;
+
             _dbContext.Attach(entity);
             EntityEntry entry = _dbContext.Entry(entity);
             entry.State = EntityState.Modified;
             _dbContext.Set<T>().Update(entity);
             if (_isAudit)
             {
-                (entity as IAudit).UserUp = _currentUserService.UserId;
-                (entity as IAudit).DateUp = DateTime.Now;
                
                 AuditTrailRequest log = new AuditTrailRequest
                 {
