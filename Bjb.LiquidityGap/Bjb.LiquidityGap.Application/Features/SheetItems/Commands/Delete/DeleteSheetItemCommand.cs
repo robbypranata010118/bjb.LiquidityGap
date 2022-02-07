@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Application.Exceptions;
-using Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Entities;
@@ -13,29 +12,29 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Delete
+namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Delete
 {
-    public class DeleteSubCategoryCommand : IRequest<Response<Unit>>
+    public class DeleteSheetItemCommand : IRequest<Response<Unit>>
     {
         public int Id { get; set; }
     }
-    public class DeleteSubCategoryCommandHandler : IRequestHandler<DeleteSubCategoryCommand, Response<Unit>>
+    public class DeleteSheetItemCommandHandler : IRequestHandler<DeleteSheetItemCommand, Response<Unit>>
     {
-        private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
+        private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IMapper _mapper;
 
-        public DeleteSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper)
+        public DeleteSheetItemCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
         }
 
-        public async Task<Response<Unit>> Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Response<Unit>> Handle(DeleteSheetItemCommand request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Data sub kategori tidak ditemukan");
+                throw new ApiException("Data post akun tidak ditemukan");
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);
