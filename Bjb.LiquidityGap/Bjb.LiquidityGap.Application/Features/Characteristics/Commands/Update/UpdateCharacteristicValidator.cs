@@ -20,7 +20,6 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Update
               .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
               .MaximumLength(100).WithMessage("{PropertyName} maksimal karakter 100");
             RuleFor(x => x.Description)
-              .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
               .MaximumLength(150).WithMessage("{PropertyName} maksimal karakter 150");
         }
     }

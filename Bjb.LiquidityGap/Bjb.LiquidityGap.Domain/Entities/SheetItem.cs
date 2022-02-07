@@ -14,7 +14,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         public int SubCategoryId { get; set; }
 
         [ForeignKey(nameof(DataSource))]
-        public int DataSourceId { get; set; }
+        public int? DataSourceId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public int? SheetItemParentId { get; set; }

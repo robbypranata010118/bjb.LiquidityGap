@@ -31,6 +31,7 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Create
 
         public async Task<Response<int>> Handle(CreateCharacteristicCommand request, CancellationToken cancellationToken)
         {
+
             var data = _mapper.Map<Characteristic>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };
