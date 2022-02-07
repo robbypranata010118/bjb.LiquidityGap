@@ -9,7 +9,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItems
     public class AddSheetItemRequest
     {
         public int SubCategoryId { get; set; }
-        public int DataSourceId { get; set; }
+        public int? DataSourceId { get; set; }
         public int? SheetItemParentId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }

@@ -21,13 +21,15 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Update
     
     public class UpdateSubCategoryCommandHandler : IRequestHandler<UpdateSubCategoryCommand, Response<Unit>>
     {
+        private readonly IGenericRepositoryAsync<Category> _categoryRepository;
         private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
         private readonly IMapper _mapper;
 
-        public UpdateSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper)
+        public UpdateSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper, IGenericRepositoryAsync<Category> categoryRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Response<Unit>> Handle(UpdateSubCategoryCommand request, CancellationToken cancellationToken)
@@ -37,6 +39,9 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Update
             {
                 throw new ApiException("Data sub kategori tidak ditemukan");
             }
+            var isCategoryExist = await _categoryRepository.GetByIdAsync(request.CategoryId);
+            if (isCategoryExist == null)
+                throw new ApiException($"Data kategori dengan id {request.CategoryId} tidak ditemukan");
             data.Code = request.Code;
             data.Name = request.Name;
             await _genericRepository.UpdateAsync(data);

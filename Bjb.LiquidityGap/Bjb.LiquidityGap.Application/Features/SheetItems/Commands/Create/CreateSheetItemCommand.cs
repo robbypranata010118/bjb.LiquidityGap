@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -21,17 +22,31 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
 
     public class CreateSubCategoryCommandHandler : IRequestHandler<CreateSheetItemCommand, Response<int>>
     {
+        private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
+        private readonly IGenericRepositoryAsync<DataSource> _dataSourceRepository;
         private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IMapper _mapper;
 
-        public CreateSubCategoryCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper)
+        public CreateSubCategoryCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IGenericRepositoryAsync<DataSource> dataSourceRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _subCategoryRepository = subCategoryRepository;
+            _dataSourceRepository = dataSourceRepository;
         }
 
         public async Task<Response<int>> Handle(CreateSheetItemCommand request, CancellationToken cancellationToken)
         {
+            var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
+            if (isSubCategoryExist == null)
+                throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
+            if(request.DataSourceId != null)
+            {
+                var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
+                if (isDataSourceExist == null)
+                    throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
+            }
+           
             var data = _mapper.Map<SheetItem>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };

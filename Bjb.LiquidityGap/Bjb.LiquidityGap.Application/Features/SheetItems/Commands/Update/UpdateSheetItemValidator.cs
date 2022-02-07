@@ -17,8 +17,6 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
              .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
              .MaximumLength(10).WithMessage("{PropertyName} maksimal karakter 10");
             RuleFor(x => x.DataSourceId.ToString())
-             .NotNull()
-             .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
              .MaximumLength(10).WithMessage("{PropertyName} maksimal karakter 10");
             RuleFor(x => x.SheetItemParentId.ToString())
              .MaximumLength(10).WithMessage("{PropertyName} maksimal karakter 10");
@@ -31,8 +29,6 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
              .MaximumLength(100).WithMessage("{PropertyName} maksimal karakter 100");
             RuleFor(x => x.MarkToCalculate)
              .NotEmpty();
-            RuleFor(x => x.Statement)
-             .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1");
             RuleFor(x => x.IsManualInput)
              .NotEmpty();
 

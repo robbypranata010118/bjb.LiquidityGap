@@ -21,6 +21,8 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
 
     public class UpdateSheetItemCommandHandler : IRequestHandler<UpdateSheetItemCommand, Response<Unit>>
     {
+        private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
+        private readonly IGenericRepositoryAsync<DataSource> _dataSourceRepository;
         private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IMapper _mapper;
 
@@ -36,6 +38,16 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
             if (data == null)
             {
                 throw new ApiException("Data post akun tidak ditemukan");
+            }
+            var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
+            if (isSubCategoryExist == null)
+                throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
+
+            if (request.DataSourceId != null)
+            {
+                var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
+                if (isDataSourceExist == null)
+                    throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
             }
             data.SubCategoryId = request.SubCategoryId;
             data.DataSourceId = request.DataSourceId;
