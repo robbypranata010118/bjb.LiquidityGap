@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -21,17 +22,22 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Create
 
     public class CreateSubCategoryCommandHandler : IRequestHandler<CreateSubCategoryCommand, Response<int>>
     {
+        private readonly IGenericRepositoryAsync<Category> _categoryRepository;
         private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
         private readonly IMapper _mapper;
 
-        public CreateSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper)
+        public CreateSubCategoryCommandHandler(IGenericRepositoryAsync<SubCategory> genericRepository, IMapper mapper, IGenericRepositoryAsync<Category> categoryRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<Response<int>> Handle(CreateSubCategoryCommand request, CancellationToken cancellationToken)
         {
+            var isCategoryExist = _categoryRepository.GetByIdAsync(request.CategoryId);
+            if (isCategoryExist == null)
+                throw new ApiException($"Data category dengan id {request.CategoryId} tidak ditemukan");
             var data = _mapper.Map<SubCategory>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };
