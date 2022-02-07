@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
+using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
@@ -37,8 +38,12 @@ namespace Bjb.LiquidityGap.Application.Mappings
             .ForMember(dto => dto.SubCategory, opt => opt.MapFrom(x => x.SubCategory))
             .ForMember(dto => dto.DataSource, opt => opt.MapFrom(x => x.DataSource))
             .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems));
+            #endregion
 
-
+            #region Characteristic
+            CreateMap<AddCharacteristicRequest, Characteristic>(); //commands
+            CreateMap<UpdateCharacteristicRequest, Characteristic>(); //commands
+            CreateMap<Characteristic, CharacteristicResponse>(); //Query
             #endregion
         }
     }
