@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -31,7 +32,10 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Quries.GetById
 
         public async Task<Response<SubCategoryResponse>> Handle(GetSubCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] { });
+            var includes = new string[] { "Category" };
+            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
+            if (data == null)
+                throw new ApiException($"data sub category dengan id {request.Id} dengan tidak ditemukan");
             var dataVm = _mapper.Map<SubCategoryResponse>(data);
             return new Response<SubCategoryResponse>(dataVm);
         }
