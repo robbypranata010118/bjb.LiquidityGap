@@ -8,7 +8,6 @@ namespace Bjb.LiquidityGap.Base.Dtos.Categories
 {
     public class AddCategoryRequest
     {
-
         public string Code { get; set; }
         public string Name { get; set; }
     }
