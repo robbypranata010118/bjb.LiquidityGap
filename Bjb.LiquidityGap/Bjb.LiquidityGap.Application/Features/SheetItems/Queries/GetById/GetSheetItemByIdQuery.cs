@@ -32,7 +32,8 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Queries.GetById
 
         public async Task<Response<SheetItemResponse>> Handle(GetSheetItemByIdQuery request, CancellationToken cancellationToken)
         {
-            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] { });
+            var includes = new string[] { "SubCategory", "DataSource" };
+            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
             var dataVm = _mapper.Map<SheetItemResponse>(data);
             return new Response<SheetItemResponse>(dataVm);
         }

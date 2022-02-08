@@ -1,28 +1,28 @@
-﻿using Bjb.LiquidityGap.Application.Features.SubCategories.Queries.Get;
+﻿using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.Get;
 using Bjb.LiquidityGap.Base.Parameters;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Generic;
 
-namespace Bjb.LiquidityGap.WebApi.Examples.SubCagories
+namespace Bjb.LiquidityGap.WebApi.Examples.Timebuckets
 {
-    public class GetPaginationExample : IExamplesProvider<GetSubCategoryQuery>
+    public class GetPaginationExample : IExamplesProvider<GetTimebucketQuery>
     {
-        public GetSubCategoryQuery GetExamples()
+        public GetTimebucketQuery GetExamples()
         {
             List<RequestFilterParameter> filterParameters = new List<RequestFilterParameter>();
             filterParameters.Add(new RequestFilterParameter
             {
-                Field = "Name",
+                Field = "Code",
                 ComparisonOperator = "like",
                 Type = "string",
-                Value = "a"
+                Value = "2M"
             });
-            return new GetSubCategoryQuery
+            return new GetTimebucketQuery
             {
                 Page = 1,
                 Length = 10,
                 Filters = filterParameters,
-                Orders = new List<string> { "Name" },
+                Orders = new List<string> { "Code" },
                 SortType = "ASC"
             };
         }

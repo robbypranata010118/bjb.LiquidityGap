@@ -1,5 +1,6 @@
 ﻿using Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create;
 using Swashbuckle.AspNetCore.Filters;
+using System.Collections.Generic;
 
 namespace Bjb.LiquidityGap.WebApi.Examples.SheetItem
 {
@@ -16,7 +17,8 @@ namespace Bjb.LiquidityGap.WebApi.Examples.SheetItem
                 SheetItemParentId = 0,
                 MarkToCalculate = true,
                 Statement = "ya",
-                IsManualInput = true
+                IsManualInput = true,
+                SheetItemCharacteristics = new List<int> {1,2},
             };
         }
     }

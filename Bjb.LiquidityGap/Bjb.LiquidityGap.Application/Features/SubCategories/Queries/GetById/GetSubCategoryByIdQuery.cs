@@ -12,13 +12,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bjb.LiquidityGap.Application.Features.SubCategories.Quries.GetById
+namespace Bjb.LiquidityGap.Application.Features.SubCategories.Queries.GetById
 {
     public class GetSubCategoryByIdQuery : IRequest<Response<SubCategoryResponse>>
     {
         public int Id { get; set; }
     }
-
     public class GetSubCategoryByIdQueryHandler : IRequestHandler<GetSubCategoryByIdQuery, Response<SubCategoryResponse>>
     {
         private readonly IGenericRepositoryAsync<SubCategory> _genericRepository;
