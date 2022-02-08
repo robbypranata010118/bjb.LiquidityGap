@@ -20,14 +20,14 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
 
     }
 
-    public class CreateSubCategoryCommandHandler : IRequestHandler<CreateSheetItemCommand, Response<int>>
+    public class CreateSheetItemCommandHandler : IRequestHandler<CreateSheetItemCommand, Response<int>>
     {
         private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
         private readonly IGenericRepositoryAsync<DataSource> _dataSourceRepository;
         private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IMapper _mapper;
 
-        public CreateSubCategoryCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IGenericRepositoryAsync<DataSource> dataSourceRepository)
+        public CreateSheetItemCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IGenericRepositoryAsync<DataSource> dataSourceRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;

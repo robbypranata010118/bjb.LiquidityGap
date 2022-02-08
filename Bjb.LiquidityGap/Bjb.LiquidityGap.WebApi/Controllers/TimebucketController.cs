@@ -1,10 +1,11 @@
-﻿using Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Create;
-using Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Delete;
-using Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Update;
-using Bjb.LiquidityGap.Application.Features.SubCategories.Queries.Get;
-using Bjb.LiquidityGap.Application.Features.SubCategories.Queries.GetById;
-using Bjb.LiquidityGap.Base.Dtos.SubCategories;
+﻿using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Create;
+using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Delete;
+using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Update;
+using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.Get;
+using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.GetById;
+using Bjb.LiquidityGap.Base.Dtos.Timebuckets;
 using Bjb.LiquidityGap.Base.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.WebApi.Controllers
 {
-    public class SubCategoryController : BaseApiController
+    [Authorize]
+    public class TimebucketController : BaseApiController
     {
-
         /// <remarks>
         /// List Paramater:
         /// 
@@ -47,28 +48,28 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///     ]        
         /// </remarks>
         [HttpPost("GetData")]
-        [ProducesResponseType(type: typeof(PagedResponse<IEnumerable<SubCategoryResponse>>), statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetData(GetSubCategoryQuery filter)
+        [ProducesResponseType(type: typeof(PagedResponse<IEnumerable<TimebucketResponse>>), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetData(GetTimebucketQuery filter)
         {
             return Ok(await Mediator.Send(filter));
         }
-        
+
         [HttpGet("{id:int}")]
-        [ProducesResponseType(type: typeof(Response<SubCategoryResponse>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(Response<TimebucketResponse>), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await Mediator.Send(new GetSubCategoryByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetTimebucketByIdQuery { Id = id }));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CreateSubCategoryCommand command)
+        public async Task<IActionResult> Post(CreateTimebucketCommand command)
         {
 
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(UpdateSubCategoryCommand command)
+        public async Task<IActionResult> Put(UpdateTimebucketCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -76,7 +77,7 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteSubCategoryCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteTimebucketCommand { Id = id }));
         }
     }
 }
