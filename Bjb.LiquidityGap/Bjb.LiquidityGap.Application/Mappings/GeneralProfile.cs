@@ -2,6 +2,7 @@
 using Bjb.LiquidityGap.Base.Dtos.AuditTrails;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
+using Bjb.LiquidityGap.Base.Dtos.Currency;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
@@ -56,6 +57,10 @@ namespace Bjb.LiquidityGap.Application.Mappings
 
             #region AuditTrail
             CreateMap<AuditTrail, AuditTrailResponse>(); //Query
+            #endregion
+
+            #region Currency
+            CreateMap<Currency, CurrencyResponse>(); //Query
             #endregion
         }
     }
