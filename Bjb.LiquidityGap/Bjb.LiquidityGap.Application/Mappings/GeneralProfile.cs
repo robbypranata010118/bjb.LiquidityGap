@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Base.Dtos.AuditTrails;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
+using Bjb.LiquidityGap.Base.Dtos.Currency;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
@@ -51,6 +53,14 @@ namespace Bjb.LiquidityGap.Application.Mappings
             CreateMap<AddTimebucketRequest, Timebucket>(); //commands
             CreateMap<UpdateTimebucketRequest, Timebucket>(); //commands
             CreateMap<Timebucket, TimebucketResponse>(); //Query
+            #endregion
+
+            #region AuditTrail
+            CreateMap<AuditTrail, AuditTrailResponse>(); //Query
+            #endregion
+
+            #region Currency
+            CreateMap<Currency, CurrencyResponse>(); //Query
             #endregion
         }
     }

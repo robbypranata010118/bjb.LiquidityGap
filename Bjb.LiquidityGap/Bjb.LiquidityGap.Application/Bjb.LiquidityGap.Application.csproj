@@ -55,4 +55,8 @@
     <ProjectReference Include="..\Bjb.LiquidityGap.Base\Bjb.LiquidityGap.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\AuditTrails\Commands\" />
+  </ItemGroup>
+
 </Project>
