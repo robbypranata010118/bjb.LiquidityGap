@@ -62,6 +62,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
         {
             try
             {
+                await _appDbContext.Database.BeginTransactionAsync();
                 var sheetItemCharacteristics = await _appDbContext.SheetItemCharacteristics.Where(x => x.SheetItemId == sheetItem.Id).ToListAsync();
                 //should be 3 in here
                 var characteristicInRequest = sheetItem.SheetItemCharacteristics;
