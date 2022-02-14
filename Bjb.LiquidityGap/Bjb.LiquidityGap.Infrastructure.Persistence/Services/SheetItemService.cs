@@ -63,15 +63,27 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
             try
             {
                 var sheetItemCharacteristics = await _appDbContext.SheetItemCharacteristics.Where(x => x.SheetItemId == sheetItem.Id).ToListAsync();
-                var sheeItemNotInRequests = sheetItemCharacteristics.Where(x => !sheetItem.SheetItemCharacteristics.Any(y => y == x.CharacteristicId)).ToList();
+                //should be 3 in here
+                var characteristicInRequest = sheetItem.SheetItemCharacteristics;
+                var sheeItemNotInRequests = sheetItemCharacteristics.Where(x => !characteristicInRequest.Any(y => y == x.CharacteristicId)).ToList();
+
                 List<SheetItemCharacteristic> newSheetItemCharacteristics = new List<SheetItemCharacteristic>();
                 foreach (var item in sheeItemNotInRequests)
                 {
                     var isExist = sheetItemCharacteristics.Where(x => x.CharacteristicId == item.CharacteristicId).FirstOrDefault();
                     if (isExist != null)
                     {
+                        //case data lama yang di delete
+                        isExist.IsActive = false;
+                        isExist.DateUp = DateTime.Now;
+                        isExist.UserUp = _currentUserService.UserId;
+                        _appDbContext.SheetItemCharacteristics.Update(isExist);
+                        
+                    }
+                    else
+                    {
                         //case untuk data baru
-                        SheetItemCharacteristic newSheetItemCharacteristic = new SheetItemCharacteristic
+                        SheetItemCharacteristic newSheetItemCharacteristic = new()
                         {
                             CharacteristicId = item.CharacteristicId,
                             SheetItemId = sheetItem.Id,
@@ -79,14 +91,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                             UserIn = _currentUserService.UserId
                         };
                         await _appDbContext.SheetItemCharacteristics.AddAsync(newSheetItemCharacteristic);
-                    }
-                    else
-                    {
-                        //case data lama yang di delete
-                        isExist.IsActive = false;
-                        isExist.DateUp = DateTime.Now;
-                        isExist.UserUp = _currentUserService.UserId;
-                        _appDbContext.SheetItemCharacteristics.Update(isExist);
                     }
                 }
                 var dataSheetItem = await _appDbContext.SheetItems.Where(x => x.Id == sheetItem.Id).FirstOrDefaultAsync();
