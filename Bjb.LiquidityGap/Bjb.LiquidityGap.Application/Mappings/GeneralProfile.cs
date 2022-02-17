@@ -35,8 +35,8 @@ namespace Bjb.LiquidityGap.Application.Mappings
             #endregion
 
             #region SheetItem
-            CreateMap<AddSheetItemRequest, SheetItem>(); //commands
-            CreateMap<UpdateSheetItemRequest, SheetItem>(); //commands
+            //CreateMap<AddSheetItemRequest, SheetItem>(); //commands
+            //CreateMap<UpdateSheetItemRequest, SheetItem>(); //commands
             CreateMap<SheetItem, SheetItemResponse>() //Query
             .ForMember(dto => dto.SubCategory, opt => opt.MapFrom(x => x.SubCategory))
             .ForMember(dto => dto.DataSource, opt => opt.MapFrom(x => x.DataSource))
