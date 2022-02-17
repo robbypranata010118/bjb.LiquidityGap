@@ -21,25 +21,40 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
 
     public class UpdateSheetItemCommandHandler : IRequestHandler<UpdateSheetItemCommand, Response<Unit>>
     {
+        private readonly ICurrentUserService _currentUserService;
         private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
         private readonly IGenericRepositoryAsync<DataSource> _dataSourceRepository;
-        private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
+        private readonly IGenericRepositoryAsync<SheetItem> _sheetItemRepository;
+        private readonly IGenericRepositoryAsync<Characteristic> _characteristicRepository;
+        private readonly ISheetItem _sheetItem;
         private readonly IMapper _mapper;
 
-        public UpdateSheetItemCommandHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper)
+        public UpdateSheetItemCommandHandler(ICurrentUserService currentUserService, 
+            IGenericRepositoryAsync<SubCategory> subCategoryRepository, 
+            IGenericRepositoryAsync<DataSource> dataSourceRepository, 
+            IGenericRepositoryAsync<SheetItem> sheetItemRepository, 
+            ISheetItem sheetItem, 
+            IMapper mapper, 
+            IGenericRepositoryAsync<Characteristic> characteristicRepository)
         {
-            _genericRepository = genericRepository;
+            _currentUserService = currentUserService;
+            _subCategoryRepository = subCategoryRepository;
+            _dataSourceRepository = dataSourceRepository;
+            _sheetItemRepository = sheetItemRepository;
+            _sheetItem = sheetItem;
             _mapper = mapper;
+            _characteristicRepository = characteristicRepository;
         }
 
         public async Task<Response<Unit>> Handle(UpdateSheetItemCommand request, CancellationToken cancellationToken)
         {
-            var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+
+            var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
             if (checkCode != null)
             {
                 throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SubCategory, request.Code));
             }
-            var data = await _genericRepository.GetByIdAsync(request.Id);
+            var data = await _sheetItemRepository.GetByIdAsync(request.Id);
             if (data == null)
             {
                 throw new ApiException("Data post akun tidak ditemukan");
@@ -54,15 +69,15 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
                 if (isDataSourceExist == null)
                     throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
             }
-            data.SubCategoryId = request.SubCategoryId;
-            data.DataSourceId = request.DataSourceId;
-            data.SheetItemParentId = request.SheetItemParentId;
-            data.Code = request.Code;
-            data.Name = request.Name;
-            data.MarkToCalculate = request.MarkToCalculate;
-            data.Statement = request.Statement;
-            data.IsManualInput = request.IsManualInput;
-            await _genericRepository.UpdateAsync(data);
+            foreach (var item in request.SheetItemCharacteristics)
+            {
+                var isCharacteristicExist = await _characteristicRepository.GetByIdAsync(item);
+                if (isCharacteristicExist is null)
+                {
+                    throw new ApiException($"data karakteristik dengan id {item} tidak ditemukan");
+                }
+            }
+            await _sheetItem.EditSheetItem(request);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }
     }
