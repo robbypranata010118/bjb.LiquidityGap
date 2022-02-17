@@ -39,24 +39,33 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
 
         public async Task<Response<int>> Handle(CreateSheetItemCommand request, CancellationToken cancellationToken)
         {
-            var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
-            if (isSubCategoryExist == null)
-                throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
-            if(request.DataSourceId != null)
+            try
             {
-                var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
-                if (isDataSourceExist == null)
-                    throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
+                var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
+                if (isSubCategoryExist == null)
+                    throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
+                if (request.DataSourceId != null)
+                {
+                    var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
+                    if (isDataSourceExist == null)
+                        throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
+                }
+                var res = await _sheetItem.CreateSheetItem(request);
+                if (res > 0)
+                {
+                    return new Response<int>(res) { StatusCode = (int)HttpStatusCode.Created };
+                }
+                else
+                {
+                    return new Response<int>(0) { StatusCode = (int)HttpStatusCode.Created };
+                }
             }
-            var res = await _sheetItem.CreateSheetItem(request);
-            if (res > 0)
+            catch (Exception ex)
             {
-                return new Response<int>(res) { StatusCode = (int)HttpStatusCode.Created };
+
+                throw new ApiException(ex.Message);
             }
-            else
-            {
-                return new Response<int>(0) { StatusCode = (int)HttpStatusCode.Created };
-            }
+            
         }
     }
 }
