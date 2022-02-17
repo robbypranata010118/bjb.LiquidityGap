@@ -26,7 +26,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
             RuleFor(x => x.Name)
              .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
              .MaximumLength(100).WithMessage("{PropertyName} maksimal karakter 100");
-            RuleFor(x => x.MarkToCalculate)
+            RuleFor(x => x.MarkToCalculate) 
              .NotEmpty();
             RuleFor(x => x.IsManualInput)
              .NotEmpty();

@@ -32,8 +32,16 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Update
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
             {
-                throw new ApiException("Data kategori tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category,request.Id));
             }
+           
+            if (data.Code != request.Code)
+            {
+                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                if (checkCode != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.Category, request.Code));
+            }
+            
             data.Code = request.Code;
             data.Name = request.Name;
             await _genericRepository.UpdateAsync(data);

@@ -48,6 +48,12 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
 
         public async Task<Response<Unit>> Handle(UpdateSheetItemCommand request, CancellationToken cancellationToken)
         {
+
+            var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+            if (checkCode != null)
+            {
+                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SubCategory, request.Code));
+            }
             var data = await _sheetItemRepository.GetByIdAsync(request.Id);
             if (data == null)
             {

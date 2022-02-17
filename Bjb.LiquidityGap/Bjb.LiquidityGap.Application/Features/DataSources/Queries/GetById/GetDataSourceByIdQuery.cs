@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -31,6 +32,8 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Queries.GetById
         public async Task<Response<DataSourceResponse>> Handle(GetDataSourceByIdQuery request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] { });
+            if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.Id));
             var dataVm = _mapper.Map<DataSourceResponse>(data);
             return new Response<DataSourceResponse>(dataVm);
         }

@@ -35,7 +35,14 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Update
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
             {
-                throw new ApiException("Source data tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.Id));
+            }
+            if (data.Name != request.Name)
+            {
+                var checkName = await _genericRepository.GetByPredicate(x => x.Name == request.Name && x.IsActive);
+                if (checkName != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.DataSource, request.Name));
+
             }
             data.Name = request.Name;
             data.ConnString = request.ConnString;
