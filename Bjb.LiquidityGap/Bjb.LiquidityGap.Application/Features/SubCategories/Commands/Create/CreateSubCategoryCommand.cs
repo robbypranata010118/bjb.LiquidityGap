@@ -35,9 +35,14 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Commands.Create
 
         public async Task<Response<int>> Handle(CreateSubCategoryCommand request, CancellationToken cancellationToken)
         {
+            var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+            if (checkCode != null)
+            {
+                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SubCategory, request.Code));
+            }
             var isCategoryExist = await _categoryRepository.GetByIdAsync(request.CategoryId);
             if (isCategoryExist == null)
-                throw new ApiException($"Data kategori dengan id {request.CategoryId} tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category, request.CategoryId));
             var data = _mapper.Map<SubCategory>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };

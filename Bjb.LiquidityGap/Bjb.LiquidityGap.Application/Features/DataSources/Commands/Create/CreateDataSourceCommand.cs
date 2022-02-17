@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -31,6 +32,11 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Create
 
         public async Task<Response<int>> Handle(CreateDataSourceCommand request, CancellationToken cancellationToken)
         {
+            var checkCode = await _genericRepository.GetByPredicate(x => x.Name == request.Name && x.IsActive);
+            if (checkCode != null)
+            {
+                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.DataSource, request.Name));
+            }
             var data = _mapper.Map<DataSource>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };

@@ -22,11 +22,13 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<Category> _genericRepository;
+        private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
         private readonly IMapper _mapper;
 
-        public DeleteCategoryCommandHandler(IGenericRepositoryAsync<Category> genericRepository, IMapper mapper)
+        public DeleteCategoryCommandHandler(IGenericRepositoryAsync<Category> genericRepository, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _subCategoryRepository = subCategoryRepository;
             _mapper = mapper;
         }
 
@@ -35,7 +37,12 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Data kategori tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category, request.Id));
+            }
+            var checkSub = await _subCategoryRepository.GetListByPredicate(x => x.CategoryId == request.Id && x.IsActive);
+            if (checkSub.Any())
+            {
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);

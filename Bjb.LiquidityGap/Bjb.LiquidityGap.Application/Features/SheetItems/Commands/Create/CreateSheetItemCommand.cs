@@ -37,6 +37,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
 
         public async Task<Response<int>> Handle(CreateSheetItemCommand request, CancellationToken cancellationToken)
         {
+           
             var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
             if (isSubCategoryExist == null)
                 throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");

@@ -24,74 +24,14 @@ namespace Bjb.LiquidityGap.Application
         public const string MODULE_HAK_AKSES = "Manajemen Hak Akses";
         public const string MODULE_PENGATURAN_SISTEM = "Pengaturan Sistem";
         public const string MODULE_QUIZ = "Quiz";
-        #region Garansi Bank
-        [Display(Name = "Customers")]
-        public const string MODULE_CUSTOMERS = "Customers";
-        [Display(Name = "DataMaster")]
-        public const string MODULE_DATA_MASTER = "Data Master";
-        [Display(Name = "Monitoring")]
-        public const string MODULE_MONITORING = "Monitoring";
-        [Display(Name = "Reporting")]
-        public const string MODULE_REPORTING = "Laporan";
-        [Display(Name = "RoleAccess")]
-        public const string MODULE_ROLEACCESS = "Manajemen Hak Akses";
-
-        [Display(Name = "ApiClient")]
-        public const string FEATURE_API_CLIENT = "ApiClient";
-        [Display(Name = "BankGuarenteeType")]
-        public const string FEATURE_BANK_GUARANTEE_TYPE = "BankGuaranteeType";
-        [Display(Name = "BankGuarentee")]
-        public const string FEATURE_BANK_GUARANTEE = "BankGuarantee";
-        [Display(Name = "Adendum")]
-        public const string ADENDUM = "Adendum";
-        [Display(Name = "Branch")]
-        public const string FEATURE_BRANCH = "Branch";
-        [Display(Name = "BusinessField")]
-        public const string FEATURE_BUSINESS_FIELD = "BusinessField";
-        [Display(Name = "BusinessType")]
-        public const string FEATURE_BUSINESS_TYPE = "BusinessType";
-        [Display(Name = "ClaimPeriod")]
-        public const string FEATURE_CLAIM_PERIOD = "ClaimPeriod";
-        [Display(Name = "Currency")]
-        public const string FEATURE_CURRENCY = "Currency";
-        [Display(Name = "City")]
-        public const string FEATURE_CITY = "City";
-        [Display(Name = "CollateralType")]
-        public const string FEATURE_COLLATERAL_TYPE = "CollateralType";
-        [Display(Name = "Customer")]
-        public const string FEATURE_CUSTOMER = "Customer";
-        [Display(Name = "CustomerUser")]
-        public const string FEATURE_CUSTOMER_USER = "CustomerUser";
-        [Display(Name = "EconomicSector")]
-        public const string FEATURE_ECONOMIC_SECTOR = "EconomicSector";
-        [Display(Name = "GuaranteeBanksForm")]
-        public const string FEATURE_GUARANTEE_BANK_FORM = "GuaranteeBanksForm";
-        [Display(Name = "Language")]
-        public const string FEATURE_LANGUAGE = "Language";
-        [Display(Name = "LegalEntity")]
-        public const string FEATURE_LEGAL_ENTITY = "LegalEntity";
-        [Display(Name = "PasswordPolicy")]
-        public const string FEATURE_PASSWORD_POLICY = "PasswordPolicy";
-        [Display(Name = "Province")]
-        public const string FEATURE_PROVINCE = "Province";
-        [Display(Name = "Retention")]
-        public const string FEATURE_RETENTION = "Retention";
-        [Display(Name = "User")]
-        public const string FEATURE_USERS = "User";
-        [Display(Name = "Role")]
-        public const string FEATURE_ROLES = "Role";
-        [Display(Name = "CanView")]
-        public const string CanView = "Menampilkan";
-        [Display(Name = "CanAdd")]
-        public const string CanAdd = "Menambahkan";
-        [Display(Name = "CanEdit")]
-        public const string CanEdit = "Mengubah";
-        [Display(Name = "CanDelete")]
-        public const string CanDelete = "Menghapus";
-        [Display(Name = "CanApprove")]
-        public const string CanApproveJLA = "Approval JLA";
-        [Display(Name = "CanAssign")]
-        public const string CanApproveDivision = "Approval Division";
+        #region Feature
+       
+        [Display(Name = "Category")]
+        public const string Category = "Category";
+        [Display(Name = "Sub Category")]
+        public const string SubCategory = "Sub Category";
+        [Display(Name = "Data Source")]
+        public const string DataSource = "Data Source";
         #endregion
 
 
@@ -105,8 +45,10 @@ namespace Bjb.LiquidityGap.Application
         public const string AccessDenied = "Maaf anda tidak ada akses untuk {0} data di halaman {1}";
 
 
-
+            
         public const string MessageAction = "Data {0} berhasil {1}";
-
+        public const string MessageDataNotFound = "Data {0} dengan {1} tidak ditemukan";
+        public const string MessageDataUnique = "Data {0} dengan code {1} sudah terdaftar silahkan gunakan code lain";
+        public const string MessageDataCantDeleted = "Data {0} tidak bisa di hapus karena sedang digunakan oleh data lain";
     }
 }
