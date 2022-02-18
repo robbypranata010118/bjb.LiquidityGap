@@ -87,7 +87,7 @@ namespace Bjb.LiquidityGap.WebApi
             }
             //app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors("DefaultPolicy");
+            //app.UseCors("DefaultPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerExtension(env, provider);
