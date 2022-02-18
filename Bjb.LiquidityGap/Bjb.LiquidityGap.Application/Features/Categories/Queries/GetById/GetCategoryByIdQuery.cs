@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -32,6 +33,8 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Queries.GetById
         public async Task<Response<CategoryResponse>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] {});
+            if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category, request.Id));
             var dataVm = _mapper.Map<CategoryResponse>(data);
             return new Response<CategoryResponse>(dataVm);
         }

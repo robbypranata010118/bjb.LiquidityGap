@@ -21,12 +21,14 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Delete
     public class DeleteDataSourceCommandHandler : IRequestHandler<DeleteDataSourceCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<DataSource> _genericRepository;
+        private readonly IGenericRepositoryAsync<SheetItem> _sheetItemRepository;
         private readonly IMapper _mapper;
 
-        public DeleteDataSourceCommandHandler(IGenericRepositoryAsync<DataSource> genericRepository, IMapper mapper)
+        public DeleteDataSourceCommandHandler(IGenericRepositoryAsync<DataSource> genericRepository, IMapper mapper, IGenericRepositoryAsync<SheetItem> sheetItemRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _sheetItemRepository = sheetItemRepository;
         }
 
         public async Task<Response<Unit>> Handle(DeleteDataSourceCommand request, CancellationToken cancellationToken)
@@ -34,7 +36,12 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Delete
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Source data tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.Id));
+            }
+            var checkSheetItem = await _sheetItemRepository.GetListByPredicate(x => x.DataSourceId == request.Id && x.IsActive);
+            if (checkSheetItem.Any())
+            {
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);

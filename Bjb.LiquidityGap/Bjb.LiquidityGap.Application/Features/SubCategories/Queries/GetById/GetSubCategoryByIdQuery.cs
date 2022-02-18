@@ -34,7 +34,7 @@ namespace Bjb.LiquidityGap.Application.Features.SubCategories.Queries.GetById
             var includes = new string[] { "Category" };
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
             if (data == null)
-                throw new ApiException($"data sub category dengan id {request.Id} dengan tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SubCategory, request.Id));
             var dataVm = _mapper.Map<SubCategoryResponse>(data);
             return new Response<SubCategoryResponse>(dataVm);
         }

@@ -14,10 +14,10 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Update
             RuleFor(x => x.Id).NotNull();
             RuleFor(x => x.Name)
              .NotNull()
-             .MinimumLength(1).WithMessage("{PropertyName} minimal karakter 1")
-             .MaximumLength(150).WithMessage("{PropertyName} maksimal karakter 150");
+             .MinimumLength(1).WithMessage("{PropertyName} minimal 1 karakter")
+              .MaximumLength(150).WithMessage("{PropertyName} maksimal 150 karakter");
             RuleFor(x => x.ConnString)
-              .MinimumLength(1).WithMessage("{PropertyName} minimal length 1");
+              .MinimumLength(1).WithMessage("{PropertyName} minimal 1 karakter");
             RuleFor(x => x.UseEtl)
               .NotEmpty();
         }

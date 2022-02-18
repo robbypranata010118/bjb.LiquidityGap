@@ -31,8 +31,9 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///     Avaiable Column
         ///     [    
         ///       Id,
-        ///       Code,
         ///       Name,
+        ///       ConnString,
+        ///       UseETL,
         ///       DateIn,
         ///       UserIn,
         ///       DateUp,
