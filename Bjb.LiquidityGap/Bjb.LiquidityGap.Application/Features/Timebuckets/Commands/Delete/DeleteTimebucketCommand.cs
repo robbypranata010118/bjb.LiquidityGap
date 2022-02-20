@@ -12,25 +12,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Delete
+namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Delete
 {
-    public class DeleteTimebucketCommand : IRequest<Response<Unit>>
+    public class DeleteTimeBucketCommand : IRequest<Response<Unit>>
     {
         public int Id { get; set; }
     }
 
-    public class DeleteTimebucketCommandHandler : IRequestHandler<DeleteTimebucketCommand, Response<Unit>>
+    public class DeleteTimeBucketCommandHandler : IRequestHandler<DeleteTimeBucketCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<Timebucket> _genericRepository;
         private readonly IMapper _mapper;
 
-        public DeleteTimebucketCommandHandler(IGenericRepositoryAsync<Timebucket> genericRepository, IMapper mapper)
+        public DeleteTimeBucketCommandHandler(IGenericRepositoryAsync<Timebucket> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
         }
 
-        public async Task<Response<Unit>> Handle(DeleteTimebucketCommand request, CancellationToken cancellationToken)
+        public async Task<Response<Unit>> Handle(DeleteTimeBucketCommand request, CancellationToken cancellationToken)
         {
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)

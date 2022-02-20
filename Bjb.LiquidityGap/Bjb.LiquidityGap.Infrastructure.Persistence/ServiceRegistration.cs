@@ -26,6 +26,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ISheetItem, SheetItemService>();
+            services.AddTransient<ITimeBucket, TimeBucketService>();
             #endregion
         }
         public static IApplicationBuilder PerformAppMigration(this IApplicationBuilder app)

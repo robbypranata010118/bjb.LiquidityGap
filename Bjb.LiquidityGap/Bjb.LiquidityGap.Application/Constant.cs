@@ -32,6 +32,8 @@ namespace Bjb.LiquidityGap.Application
         public const string SubCategory = "Sub Category";
         [Display(Name = "Data Source")]
         public const string DataSource = "Data Source";
+        [Display(Name = "Time Bucket")]
+        public const string TimeBucket = "Time Bucket";
         #endregion
 
 
