@@ -11,7 +11,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
     public class CharacteristicTimebucket : BaseEntity<int>, IAuditable, IDeactivable
     {
         [ForeignKey(nameof(Characteristic))]
-        public int CharactericticId { get; set; }
+        public int CharacteristicId { get; set; }
         [ForeignKey(nameof(Timebucket))]
         public int TimebucketId { get; set; }
         public bool UsePercentage { get; set; }

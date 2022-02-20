@@ -54,6 +54,22 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 };
                 await _appDbContext.SheetItems.AddAsync(sheetItem);
                 await _appDbContext.SaveChangesAsync();
+                await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                {
+                    Id = Guid.NewGuid(),
+                    Action = Constant.ACTION_UPDATE,
+                    ApplicationName = Constant.NAMA_APLIKASI,
+                    Detail = "",
+                    Feature = "Sheet Item Characteristic",
+                    LogDate = DateTime.Now,
+                    Message = "Success",
+                    Module = "Master Data",
+                    ReferenceId = sheetItem.Id.ToString(),
+                    RoleId = _currentUserService.IdFungsi,
+                    RoleName = _currentUserService.IdFungsi,
+                    UserId = _currentUserService.UserId,
+                    UserName = _currentUserService.UserName,
+                });
                 await _appDbContext.Database.CommitTransactionAsync();
                 return sheetItem.Id;
             }

@@ -227,7 +227,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("CharacteristicFormula");
+                    b.ToTable("CharacteristicFormulas");
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.CharacteristicTimebucket", b =>
@@ -238,7 +238,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CharactericticId")
+                    b.Property<int>("CharacteristicId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateIn")
@@ -273,13 +273,13 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CharactericticId");
+                    b.HasIndex("CharacteristicId");
 
                     b.HasIndex("IsActive");
 
                     b.HasIndex("TimebucketId");
 
-                    b.ToTable("CharacteristicTimebucket");
+                    b.ToTable("CharacteristicTimebuckets");
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.Currency", b =>
@@ -415,7 +415,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SheetItemId");
 
-                    b.ToTable("LiquidityGap");
+                    b.ToTable("LiquidityGaps");
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.LiquidityGapBucket", b =>
@@ -470,7 +470,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TimeBucketId");
 
-                    b.ToTable("LiquidityGapBucket");
+                    b.ToTable("LiquidityGapBuckets");
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.SheetItem", b =>
@@ -711,7 +711,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("Timebucket");
+                    b.ToTable("Timebuckets");
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.CharacteristicFormula", b =>
@@ -729,7 +729,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Bjb.LiquidityGap.Domain.Entities.Characteristic", "Characteristic")
                         .WithMany("characteristicTimebuckets")
-                        .HasForeignKey("CharactericticId")
+                        .HasForeignKey("CharacteristicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
