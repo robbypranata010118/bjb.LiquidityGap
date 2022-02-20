@@ -6,7 +6,7 @@ using Bjb.LiquidityGap.Base.Dtos.Currency;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
-using Bjb.LiquidityGap.Base.Dtos.Timebuckets;
+using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Domain.Entities;
 
 namespace Bjb.LiquidityGap.Application.Mappings
@@ -50,9 +50,9 @@ namespace Bjb.LiquidityGap.Application.Mappings
             #endregion
 
             #region Timebucket
-            CreateMap<AddTimebucketRequest, Timebucket>(); //commands
-            CreateMap<UpdateTimebucketRequest, Timebucket>(); //commands
-            CreateMap<Timebucket, TimebucketResponse>(); //Query
+            CreateMap<Timebucket, TimeBucketResponse>() //Query
+                //not fix for mapping
+            .ForMember(dto => dto.CharacteristicTimebuckets, opt => opt.MapFrom(x => x.CharacteristicTimebuckets));
             #endregion
 
             #region AuditTrail

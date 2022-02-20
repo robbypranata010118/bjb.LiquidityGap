@@ -1,18 +1,26 @@
-﻿using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Update;
+﻿using Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Update;
+using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace Bjb.LiquidityGap.WebApi.Examples.Timebuckets
+namespace Bjb.LiquidityGap.WebApi.Examples.TimeBuckets
 {
-    public class UpdateTimebucketExample : IExamplesProvider<UpdateTimebucketCommand>
+    public class UpdateTimeBucketExample : IExamplesProvider<UpdateTimeBucketCommand>
     {
-        public UpdateTimebucketCommand GetExamples()
+        public UpdateTimeBucketCommand GetExamples()
         {
-            return new UpdateTimebucketCommand()
+            return new UpdateTimeBucketCommand()
             {
                 Id = 1,
                 Code = "2M",
                 Label = "Overnight",
-                Sequence = 1
+                Sequence = 1,
+                CharacteristicTimebuckets = new AddCharacteristicTimeBucketRequest
+                {
+                    CharacteristicId = 1,
+                    UsePercentage = true,
+                    DayRange = 1,
+                    Percentage = 13,
+                }
             };
         }
     }

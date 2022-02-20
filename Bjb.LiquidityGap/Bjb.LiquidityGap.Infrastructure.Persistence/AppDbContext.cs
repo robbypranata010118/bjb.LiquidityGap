@@ -27,10 +27,8 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
         public virtual DbSet<SheetItemCharacteristic> SheetItemCharacteristics { get; set; }
         public virtual DbSet<SheetItem> SheetItems { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
-        public virtual DbSet<SummarySource> SummarySources { get; set; }
-       
+        public virtual DbSet<SummarySource> SummarySources { get; set; }       
         public virtual DbSet<Timebucket> Timebuckets { get; set; }
-      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyBaseEntityConfiguration();

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Bjb.LiquidityGap.Application.Features.Categories.Queries.GetById;
-using Bjb.LiquidityGap.Base.Dtos.Timebuckets;
+using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Entities;
@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.GetById
 {
-    public class GetTimebucketByIdQuery : IRequest<Response<TimebucketResponse>>
+    public class GetTimebucketByIdQuery : IRequest<Response<TimeBucketResponse>>
     {
         public int Id { get; set; }
     }
 
-    public class GetTimebucketByIdQueryHandler : IRequestHandler<GetTimebucketByIdQuery, Response<TimebucketResponse>>
+    public class GetTimebucketByIdQueryHandler : IRequestHandler<GetTimebucketByIdQuery, Response<TimeBucketResponse>>
     {
         private readonly IGenericRepositoryAsync<Timebucket> _genericRepository;
         private readonly IMapper _mapper;
@@ -30,11 +30,12 @@ namespace Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.GetById
             _mapper = mapper;
         }
 
-        public async Task<Response<TimebucketResponse>> Handle(GetTimebucketByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<TimeBucketResponse>> Handle(GetTimebucketByIdQuery request, CancellationToken cancellationToken)
         {
-            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] { });
-            var dataVm = _mapper.Map<TimebucketResponse>(data);
-            return new Response<TimebucketResponse>(dataVm);
+            var includes = new string[] { "CharacteristicTimebuckets" };
+            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
+            var dataVm = _mapper.Map<TimeBucketResponse>(data);
+            return new Response<TimeBucketResponse>(dataVm);
         }
     }
 }

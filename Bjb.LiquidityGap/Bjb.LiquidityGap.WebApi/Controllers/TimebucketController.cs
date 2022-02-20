@@ -1,9 +1,9 @@
-﻿using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Create;
-using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Delete;
-using Bjb.LiquidityGap.Application.Features.Timebuckets.Commands.Update;
-using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.Get;
+﻿using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.Get;
 using Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.GetById;
-using Bjb.LiquidityGap.Base.Dtos.Timebuckets;
+using Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Create;
+using Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Delete;
+using Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Update;
+using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +34,8 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///     [    
         ///       Id,
         ///       Code,
-        ///       Name,
+        ///       Label,
+        ///       Sequence,
         ///       DateIn,
         ///       UserIn,
         ///       DateUp,
@@ -48,28 +49,28 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///     ]        
         /// </remarks>
         [HttpPost("GetData")]
-        [ProducesResponseType(type: typeof(PagedResponse<IEnumerable<TimebucketResponse>>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(PagedResponse<IEnumerable<TimeBucketResponse>>), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetData(GetTimebucketQuery filter)
         {
             return Ok(await Mediator.Send(filter));
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(type: typeof(Response<TimebucketResponse>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(Response<TimeBucketResponse>), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await Mediator.Send(new GetTimebucketByIdQuery { Id = id }));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CreateTimebucketCommand command)
+        public async Task<IActionResult> Post(CreateTimeBucketCommand command)
         {
 
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(UpdateTimebucketCommand command)
+        public async Task<IActionResult> Put(UpdateTimeBucketCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -77,7 +78,7 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteTimebucketCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteTimeBucketCommand { Id = id }));
         }
     }
 }
