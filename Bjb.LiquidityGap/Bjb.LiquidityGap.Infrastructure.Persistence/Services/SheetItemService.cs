@@ -29,8 +29,8 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 await _appDbContext.Database.BeginTransactionAsync();
                 var checkCharacteriticId = await _appDbContext.Characteristics.Where(x => request.SheetItemCharacteristics.Contains(x.Id)).Select(x => x.Id).ToListAsync();
                 var idNotExist = request.SheetItemCharacteristics.Except(checkCharacteriticId).ToList();
-                if (idNotExist != null)
-                    throw new Exception(String.Format($"Data characteristic dengan id {String.Join(" dan ", idNotExist.Select(x => x.ToString()))} tidak ditemukan"));
+                if (idNotExist == null)
+                throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.Characteristic, $"{String.Join(" dan ", idNotExist.Select(x => x.ToString()))}"));
                 SheetItem sheetItem = new SheetItem
                 {
                     SubCategoryId = request.SubCategoryId,
@@ -44,7 +44,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                     UserIn = _currentUserService.UserId,
                     DateIn = DateTime.Now,
                     IsActive = true,
-                    SheetItemCharacteristics = request.SheetItemCharacteristics.Select(x => new SheetItemCharacteristic
+                    SheetItemCharacteristics = checkCharacteriticId.Select(x => new SheetItemCharacteristic
                     {
                         UserIn = _currentUserService.UserId,
                         DateIn = DateTime.Now,
@@ -121,7 +121,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 {
                     var checkDataWillBeAdded = await _appDbContext.Characteristics.Where(x => x.Id == item && x.IsActive).FirstOrDefaultAsync();
                     if (checkDataWillBeAdded == null)
-                        throw new ApiException($"Data characteristic dengan id {item} tidak ditemukan");
+                        throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.Characteristic, item));
                     SheetItemCharacteristic sheetItemCharacteristic = new SheetItemCharacteristic
                     {
                         CharacteristicId = item,
@@ -159,6 +159,8 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 dataSheetItem.Code = sheetItem.Code;
                 dataSheetItem.Name = sheetItem.Name;
                 dataSheetItem.Statement = sheetItem.Statement;
+                dataSheetItem.UserUp = _currentUserService.UserId;
+                dataSheetItem.DateUp = DateTime.Now;
                 _appDbContext.SheetItems.Update(dataSheetItem);
                 await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
                 {

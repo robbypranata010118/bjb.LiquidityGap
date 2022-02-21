@@ -42,7 +42,7 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Delete
             var checkSub = await _subCategoryRepository.GetListByPredicate(x => x.CategoryId == request.Id && x.IsActive);
             if (checkSub.Any())
             {
-                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name));
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.SubCategory));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);

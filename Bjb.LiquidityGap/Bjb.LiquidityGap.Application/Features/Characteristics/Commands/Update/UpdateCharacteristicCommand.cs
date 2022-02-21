@@ -32,7 +32,14 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Update
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
             {
-                throw new ApiException("Data karakteristik tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, request.Id));
+            }
+
+            if (data.Code != request.Code)
+            {
+                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                if (checkCode != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.Characteristic, request.Code));
             }
             var existCharacteristicFormula = await _characteristicFormulaRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
             var ids = request.Formula.Where(x => x.Id != null).Select(x => x.Id.Value).ToList();
@@ -76,6 +83,7 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Update
             data.Code = request.Code;
             data.Name = request.Name;
             data.Description = request.Description;
+            data.CalcDay = request.CalcDay;
             await _genericRepository.UpdateAsync(data);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }

@@ -48,33 +48,33 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
 
         public async Task<Response<Unit>> Handle(UpdateSheetItemCommand request, CancellationToken cancellationToken)
         {
-
-            var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
-            if (checkCode != null)
-            {
-                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SubCategory, request.Code));
-            }
             var data = await _sheetItemRepository.GetByIdAsync(request.Id);
             if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.Id));
+
+            if (data.Code != request.Code)
             {
-                throw new ApiException("Data post akun tidak ditemukan");
+                var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                if (checkCode != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SheetItem, request.Code));
             }
+           
             var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
             if (isSubCategoryExist == null)
-                throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category, request.SubCategoryId));
 
             if (request.DataSourceId != null)
             {
                 var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
                 if (isDataSourceExist == null)
-                    throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
+                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.DataSourceId));
             }
             foreach (var item in request.SheetItemCharacteristics)
             {
                 var isCharacteristicExist = await _characteristicRepository.GetByIdAsync(item);
                 if (isCharacteristicExist is null)
                 {
-                    throw new ApiException($"data karakteristik dengan id {item} tidak ditemukan");
+                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, item));
                 }
             }
             await _sheetItem.EditSheetItem(request);
