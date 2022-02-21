@@ -38,6 +38,8 @@ namespace Bjb.LiquidityGap.Application
         public const string Characteristic = "Characteristic";
         [Display(Name = "Post Akun")]
         public const string SheetItem = "Post Akun";
+        [Display(Name = "Characteristic Formula")]
+        public const string CharacteristicFormula = "CharacteristicFormula";
         #endregion
 
 
