@@ -11,6 +11,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.Characteristics
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int CalcDay { get; set; }
         public ICollection<AddCharacteristicFormula> Formula { get; set; }
     }
 
