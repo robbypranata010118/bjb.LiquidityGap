@@ -194,7 +194,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         {
             (entity as IAudit).UserUp = _currentUserService.UserId;
             (entity as IAudit).DateUp = DateTime.Now;
-
             _dbContext.Attach(entity);
             EntityEntry entry = _dbContext.Entry(entity);
             entry.State = EntityState.Modified;

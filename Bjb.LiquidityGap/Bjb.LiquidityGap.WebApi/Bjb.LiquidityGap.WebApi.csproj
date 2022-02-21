@@ -68,7 +68,6 @@
     <ProjectReference Include="..\Bjb.LiquidityGap.Infrastructure.Persistence\Bjb.LiquidityGap.Infrastructure.Persistence.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\v2\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

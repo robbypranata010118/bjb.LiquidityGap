@@ -22,12 +22,14 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
     public class DeleteCharacteristicCommandHandler : IRequestHandler<DeleteCharacteristicCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<Characteristic> _genericRepository;
+        private readonly IGenericRepositoryAsync<CharacteristicFormula> _characteristicFormulaRepository;
         private readonly IMapper _mapper;
 
-        public DeleteCharacteristicCommandHandler(IGenericRepositoryAsync<Characteristic> genericRepository, IMapper mapper)
+        public DeleteCharacteristicCommandHandler(IGenericRepositoryAsync<Characteristic> genericRepository, IMapper mapper, IGenericRepositoryAsync<CharacteristicFormula> characteristicFormulaRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _characteristicFormulaRepository = characteristicFormulaRepository;
         }
 
         public async Task<Response<Unit>> Handle(DeleteCharacteristicCommand request, CancellationToken cancellationToken)
@@ -37,7 +39,15 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
             {
                 throw new ApiException("Data Karakteristik tidak ditemukan");
             }
+            var existCharacteristicFormula = await _characteristicFormulaRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
+            List<CharacteristicFormula> characteristicFormulas = new List<CharacteristicFormula>();
+            foreach (var item in existCharacteristicFormula)
+            {
+                item.IsActive = false;
+                characteristicFormulas.Add(item);
+            }
             data.IsActive = false;
+            await _characteristicFormulaRepository.UpdateRangeAsync(characteristicFormulas);
             await _genericRepository.UpdateAsync(data);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }
