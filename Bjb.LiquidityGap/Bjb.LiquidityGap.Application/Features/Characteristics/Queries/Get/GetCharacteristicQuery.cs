@@ -32,7 +32,7 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Queries.Get
 
         public async Task<PagedResponse<IEnumerable<CharacteristicResponse>>> Handle(GetCharacteristicQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { };
+            var includes = new string[] { "CharacteristicFormulas" };
             var data = await _genericRepository.GetPagedReponseAsync(request, includes);
             var dataVm = _mapper.Map<IEnumerable<CharacteristicResponse>>(data.Results);
             return new PagedResponse<IEnumerable<CharacteristicResponse>>(dataVm, data.Info, request.Page, request.Length)

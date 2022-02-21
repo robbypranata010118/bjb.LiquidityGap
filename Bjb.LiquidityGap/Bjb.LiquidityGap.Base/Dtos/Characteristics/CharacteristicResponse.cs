@@ -18,5 +18,14 @@ namespace Bjb.LiquidityGap.Base.Dtos.Characteristics
         public string UserUp { get; set; }
         public DateTime? DateUp { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<CharacteristicFormulaResponse> Formulas { get; set; }
+    }
+
+    public class CharacteristicFormulaResponse
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Formula { get; set; }
+        public int Sequence { get; set; }
     }
 }
