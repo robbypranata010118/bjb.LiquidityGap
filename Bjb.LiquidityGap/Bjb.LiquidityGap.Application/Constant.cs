@@ -34,6 +34,10 @@ namespace Bjb.LiquidityGap.Application
         public const string DataSource = "Data Source";
         [Display(Name = "Time Bucket")]
         public const string TimeBucket = "Time Bucket";
+        [Display(Name = "Characteristic")]
+        public const string Characteristic = "Characteristic";
+        [Display(Name = "Post Akun")]
+        public const string SheetItem = "Post Akun";
         #endregion
 
 
@@ -51,6 +55,6 @@ namespace Bjb.LiquidityGap.Application
         public const string MessageAction = "Data {0} berhasil {1}";
         public const string MessageDataNotFound = "Data {0} dengan {1} tidak ditemukan";
         public const string MessageDataUnique = "Data {0} dengan code {1} sudah terdaftar silahkan gunakan code lain";
-        public const string MessageDataCantDeleted = "Data {0} tidak bisa di hapus karena sedang digunakan oleh data lain";
+        public const string MessageDataCantDeleted = "Data {0} tidak bisa di hapus karena sedang digunakan oleh {1}";
     }
 }

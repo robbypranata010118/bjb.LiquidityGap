@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -31,7 +32,11 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Create
 
         public async Task<Response<int>> Handle(CreateCharacteristicCommand request, CancellationToken cancellationToken)
         {
-
+            var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+            if (checkCode != null)
+            {
+                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.Characteristic, request.Code));
+            }
             var data = _mapper.Map<Characteristic>(request);
             await _genericRepository.AddAsync(data);
             return new Response<int>(data.Id) { StatusCode = (int)HttpStatusCode.Created };

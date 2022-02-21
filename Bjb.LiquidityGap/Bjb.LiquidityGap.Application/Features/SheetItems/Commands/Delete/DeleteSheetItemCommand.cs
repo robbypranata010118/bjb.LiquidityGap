@@ -34,7 +34,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Delete
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Data post akun tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.Id));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);
