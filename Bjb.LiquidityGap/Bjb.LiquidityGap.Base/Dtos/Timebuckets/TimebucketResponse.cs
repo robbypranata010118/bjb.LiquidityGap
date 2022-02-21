@@ -1,4 +1,5 @@
-﻿using Bjb.LiquidityGap.Domain.Entities;
+﻿using Bjb.LiquidityGap.Base.Dtos.Characteristics;
+using Bjb.LiquidityGap.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.TimeBuckets
     public class ChacteristicTimeBucketResponse
     {
         public int Id { get; set; }
-        public int CharacteristicId { get; set; }
+        public CharacteristicResponse Characteristic { get; set; }
         public bool UsePercentage { get; set; }
         public int DayRange { get; set; }
         public decimal Percentage { get; set; }

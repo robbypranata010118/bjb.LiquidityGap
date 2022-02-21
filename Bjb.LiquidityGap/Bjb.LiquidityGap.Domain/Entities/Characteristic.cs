@@ -13,10 +13,12 @@ namespace Bjb.LiquidityGap.Domain.Entities
     {
         [MaxLength(10)]
         public string Code { get; set; }
-        [MaxLength(50)]
-        public string Name { get; set; }
         [MaxLength(100)]
+        public string Name { get; set; }
+        [MaxLength(150)]
         public string Description { get; set; }
+        [Required]
+        public int CalcDay { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]

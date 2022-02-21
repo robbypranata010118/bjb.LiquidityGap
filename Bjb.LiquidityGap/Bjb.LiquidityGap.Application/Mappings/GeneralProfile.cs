@@ -49,9 +49,14 @@ namespace Bjb.LiquidityGap.Application.Mappings
             CreateMap<Characteristic, CharacteristicResponse>(); //Query
             #endregion
 
+            #region CharacteristicTimebucket
+            CreateMap<CharacteristicTimebucket, ChacteristicTimeBucketResponse>() //Query
+                .ForMember(x => x.Characteristic, m => m.MapFrom(x => x.Characteristic));
+            #endregion
+
             #region Timebucket
             CreateMap<Timebucket, TimeBucketResponse>() //Query
-                //not fix for mapping
+                                                        //not fix for mapping
             .ForMember(dto => dto.CharacteristicTimebuckets, opt => opt.MapFrom(x => x.CharacteristicTimebuckets));
             #endregion
 
