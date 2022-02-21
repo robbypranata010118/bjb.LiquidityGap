@@ -31,7 +31,8 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Queries.GetById
 
         public async Task<Response<CharacteristicResponse>> Handle(GetCharacteristicByIdQuery request, CancellationToken cancellationToken)
         {
-            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", new string[] { });
+            var includes = new string[] { "CharacteristicFormulas" };
+            var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
             var dataVm = _mapper.Map<CharacteristicResponse>(data);
             return new Response<CharacteristicResponse>(dataVm);
         }

@@ -48,11 +48,13 @@ namespace Bjb.LiquidityGap.Application.Mappings
                 .ForMember(x => x.CharacteristicFormulas, m => m.MapFrom(x => x.Formula));
             CreateMap<UpdateCharacteristicRequest, Characteristic>() //commands
                  .ForMember(x => x.CharacteristicFormulas, m => m.MapFrom(x => x.Formula));
-            CreateMap<Characteristic, CharacteristicResponse>(); //Query
+            CreateMap<Characteristic, CharacteristicResponse>() //Query
+                 .ForMember(x => x.Formulas, m => m.MapFrom(x => x.CharacteristicFormulas));
             #endregion
 
             #region Characteristic Formula
             CreateMap<AddCharacteristicFormula, CharacteristicFormula>(); //commands
+            CreateMap<CharacteristicFormula, CharacteristicFormulaResponse>(); //commands
             #endregion
 
             #region CharacteristicTimebucket
