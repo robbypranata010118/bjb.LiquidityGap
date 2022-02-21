@@ -22,9 +22,10 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
     public class DeleteCharacteristicCommandHandler : IRequestHandler<DeleteCharacteristicCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<Characteristic> _genericRepository;
+        private readonly IGenericRepositoryAsync<CharacteristicFormula> _characteristicFormulaRepository;
+        private readonly IMapper _mapper;
         private readonly IGenericRepositoryAsync<SheetItem> _sheetItemRepository;
         private readonly IGenericRepositoryAsync<CharacteristicTimebucket> _chacteristicTimeBucketRepository;
-        private readonly IMapper _mapper;
 
         public DeleteCharacteristicCommandHandler(IGenericRepositoryAsync<Characteristic> genericRepository, IMapper mapper, IGenericRepositoryAsync<SheetItem> sheetItemRepository, IGenericRepositoryAsync<CharacteristicTimebucket> chacteristicTimeBucketRepository)
         {
@@ -36,22 +37,35 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
 
         public async Task<Response<Unit>> Handle(DeleteCharacteristicCommand request, CancellationToken cancellationToken)
         {
-            var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
+            var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id);
             if (data == null)
             {
                 throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, request.Id));
             }
-            var checkSheetItem = await _sheetItemRepository.GetListByPredicate(x => x.DataSourceId == request.Id && x.IsActive);
+            var checkSheetItem = await _sheetItemRepository.GetListByPredicate(x => x.DataSourceId == request.Id);
             if (checkSheetItem.Any())
             {
                 throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.SheetItem));
             }
-            var checkCharacteristicTimeBucket = await _chacteristicTimeBucketRepository.GetListByPredicate(x => x.CharacteristicId == request.Id && x.IsActive);
+            var checkCharacteristicTimeBucket = await _chacteristicTimeBucketRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
             if (checkCharacteristicTimeBucket.Any())
             {
                 throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.TimeBucket));
             }
+            var checkCharacteristicFormula = await _characteristicFormulaRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
+            if (checkCharacteristicFormula.Any())
+            {
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.CharacteristicFormula));
+            }
+            var existCharacteristicFormula = await _characteristicFormulaRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
+            List<CharacteristicFormula> characteristicFormulas = new List<CharacteristicFormula>();
+            foreach (var item in existCharacteristicFormula)
+            {
+                item.IsActive = false;
+                characteristicFormulas.Add(item);
+            }
             data.IsActive = false;
+            await _characteristicFormulaRepository.UpdateRangeAsync(characteristicFormulas);
             await _genericRepository.UpdateAsync(data);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }
