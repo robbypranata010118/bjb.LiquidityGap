@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Parameters;
@@ -32,7 +33,7 @@ namespace Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.Get
 
         public async Task<PagedResponse<IEnumerable<TimeBucketResponse>>> Handle(GetTimebucketQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { "CharacteristicTimebuckets" };
+            var includes = new string[] { "CharacteristicTimebuckets.Characteristic", "CharacteristicTimebuckets" };
             var data = await _genericRepository.GetPagedReponseAsync(request, includes);
             var dataVm = _mapper.Map<IEnumerable<TimeBucketResponse>>(data.Results);
             return new PagedResponse<IEnumerable<TimeBucketResponse>>(dataVm, data.Info, request.Page, request.Length)

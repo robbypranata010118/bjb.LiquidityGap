@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Application.Features.Categories.Queries.GetById;
 using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Base.Interfaces;
@@ -32,8 +33,10 @@ namespace Bjb.LiquidityGap.Application.Features.Timebuckets.Queries.GetById
 
         public async Task<Response<TimeBucketResponse>> Handle(GetTimebucketByIdQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { "CharacteristicTimebuckets" };
+            var includes = new string[] { "CharacteristicTimebuckets.Characteristic", "CharacteristicTimebuckets" };
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
+            if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.Id));
             var dataVm = _mapper.Map<TimeBucketResponse>(data);
             return new Response<TimeBucketResponse>(dataVm);
         }

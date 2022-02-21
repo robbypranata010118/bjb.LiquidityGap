@@ -41,7 +41,7 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Delete
             var checkSheetItem = await _sheetItemRepository.GetListByPredicate(x => x.DataSourceId == request.Id && x.IsActive);
             if (checkSheetItem.Any())
             {
-                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name));
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.SheetItem));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);

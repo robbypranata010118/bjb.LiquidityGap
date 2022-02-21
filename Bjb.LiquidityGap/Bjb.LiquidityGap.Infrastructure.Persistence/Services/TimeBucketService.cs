@@ -29,9 +29,9 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
             try
             {
                 await _appDbContext.Database.BeginTransactionAsync();
-                var checkCharacteriticId = await _appDbContext.Characteristics.Where(x=> request.CharacteristicTimebuckets.CharacteristicId == x.Id).FirstOrDefaultAsync();
+                var checkCharacteriticId = await _appDbContext.Characteristics.Where(x => request.CharacteristicTimebuckets.CharacteristicId == x.Id).FirstOrDefaultAsync();
                 if (checkCharacteriticId == null)
-                    throw new Exception(String.Format($"Data characteristic dengan id {request.CharacteristicTimebuckets.CharacteristicId} tidak ditemukan"));
+                    throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, request.CharacteristicTimebuckets.CharacteristicId));
                 Timebucket timeBucket = new Timebucket
                 {
                     Code = request.Code,
@@ -79,58 +79,58 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 timeBucketCharacteristics.IsActive = false;
                 timeBucketCharacteristics.UserUp = _currentUserService.UserId;
                 timeBucketCharacteristics.DateUp = DateTime.Now;
-                    _appDbContext.CharacteristicTimebuckets.Update(timeBucketCharacteristics);
-                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
-                    {
-                        Id = Guid.NewGuid(),
-                        Action = Constant.ACTION_UPDATE,
-                        ApplicationName = Constant.NAMA_APLIKASI,
-                        Detail = "",
-                        Feature = "Time Bucket Characteristic",
-                        LogDate = DateTime.Now,
-                        Message = "Success",
-                        Module = "Master Data",
-                        ReferenceId = timeBucketCharacteristics.Id.ToString(),
-                        RoleId = _currentUserService.IdFungsi,
-                        RoleName = _currentUserService.IdFungsi,
-                        UserId = _currentUserService.UserId,
-                        UserName = _currentUserService.UserName,
-                    });
-                
+                _appDbContext.CharacteristicTimebuckets.Update(timeBucketCharacteristics);
+                await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                {
+                    Id = Guid.NewGuid(),
+                    Action = Constant.ACTION_UPDATE,
+                    ApplicationName = Constant.NAMA_APLIKASI,
+                    Detail = "",
+                    Feature = "Time Bucket Characteristic",
+                    LogDate = DateTime.Now,
+                    Message = "Success",
+                    Module = "Master Data",
+                    ReferenceId = timeBucketCharacteristics.Id.ToString(),
+                    RoleId = _currentUserService.IdFungsi,
+                    RoleName = _currentUserService.IdFungsi,
+                    UserId = _currentUserService.UserId,
+                    UserName = _currentUserService.UserName,
+                });
+
                 #endregion
                 #region Added
-                    var checkDataWillBeAdded = await _appDbContext.Characteristics.Where(x => x.Id == timeBucket.CharacteristicTimebuckets.CharacteristicId && x.IsActive).FirstOrDefaultAsync();
-                    if (checkDataWillBeAdded == null)
-                        throw new ApiException($"Data characteristic dengan id {timeBucket.CharacteristicTimebuckets.CharacteristicId} tidak ditemukan");
-                    CharacteristicTimebucket timeBucketCharacteristic = new CharacteristicTimebucket
-                    {
-                        CharacteristicId = timeBucket.CharacteristicTimebuckets.CharacteristicId,
-                        TimebucketId = timeBucket.Id,
-                        UsePercentage = timeBucket.CharacteristicTimebuckets.UsePercentage,
-                        DayRange = timeBucket.CharacteristicTimebuckets.DayRange,
-                        Percentage = timeBucket.CharacteristicTimebuckets.Percentage,
-                        UserIn = _currentUserService.UserId,
-                        DateIn = DateTime.Now,
-                        IsActive = true
-                    };
-                    _appDbContext.CharacteristicTimebuckets.Add(timeBucketCharacteristic);
-                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
-                    {
-                        Id = Guid.NewGuid(),
-                        Action = Constant.ACTION_INSERT,
-                        ApplicationName = Constant.NAMA_APLIKASI,
-                        Detail = "",
-                        Feature = "Time Bucket Characteristic",
-                        LogDate = DateTime.Now,
-                        Message = "Success",
-                        Module = "Master Data",
-                        ReferenceId = timeBucketCharacteristic.Id.ToString(),
-                        RoleId = _currentUserService.IdFungsi,
-                        RoleName = _currentUserService.IdFungsi,
-                        UserId = _currentUserService.UserId,
-                        UserName = _currentUserService.UserName,
-                    });
-                
+                var checkDataWillBeAdded = await _appDbContext.Characteristics.Where(x => x.Id == timeBucket.CharacteristicTimebuckets.CharacteristicId && x.IsActive).FirstOrDefaultAsync();
+                if (checkDataWillBeAdded == null)
+                    throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, timeBucket.CharacteristicTimebuckets.CharacteristicId));
+                CharacteristicTimebucket timeBucketCharacteristic = new CharacteristicTimebucket
+                {
+                    CharacteristicId = timeBucket.CharacteristicTimebuckets.CharacteristicId,
+                    TimebucketId = timeBucket.Id,
+                    UsePercentage = timeBucket.CharacteristicTimebuckets.UsePercentage,
+                    DayRange = timeBucket.CharacteristicTimebuckets.DayRange,
+                    Percentage = timeBucket.CharacteristicTimebuckets.Percentage,
+                    UserIn = _currentUserService.UserId,
+                    DateIn = DateTime.Now,
+                    IsActive = true
+                };
+                _appDbContext.CharacteristicTimebuckets.Add(timeBucketCharacteristic);
+                await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                {
+                    Id = Guid.NewGuid(),
+                    Action = Constant.ACTION_INSERT,
+                    ApplicationName = Constant.NAMA_APLIKASI,
+                    Detail = "",
+                    Feature = "Time Bucket Characteristic",
+                    LogDate = DateTime.Now,
+                    Message = "Success",
+                    Module = "Master Data",
+                    ReferenceId = timeBucketCharacteristic.Id.ToString(),
+                    RoleId = _currentUserService.IdFungsi,
+                    RoleName = _currentUserService.IdFungsi,
+                    UserId = _currentUserService.UserId,
+                    UserName = _currentUserService.UserName,
+                });
+
                 #endregion
 
                 var dataTimeBucket = await _appDbContext.Timebuckets.Where(x => x.Id == timeBucket.Id).FirstOrDefaultAsync();

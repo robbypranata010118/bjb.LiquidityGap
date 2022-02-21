@@ -23,32 +23,39 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
     public class CreateSheetItemCommandHandler : IRequestHandler<CreateSheetItemCommand, Response<int>>
     {
         private readonly ICurrentUserService _currentUserService;
+        private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IGenericRepositoryAsync<SubCategory> _subCategoryRepository;
         private readonly IGenericRepositoryAsync<DataSource> _dataSourceRepository;
         private readonly ISheetItem _sheetItem;
         private readonly IMapper _mapper;
 
-        public CreateSheetItemCommandHandler(ISheetItem sheetItem, IMapper mapper, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IGenericRepositoryAsync<DataSource> dataSourceRepository, ICurrentUserService currentUserService)
+        public CreateSheetItemCommandHandler(ISheetItem sheetItem, IMapper mapper, IGenericRepositoryAsync<SubCategory> subCategoryRepository, IGenericRepositoryAsync<DataSource> dataSourceRepository, ICurrentUserService currentUserService, IGenericRepositoryAsync<SheetItem> genericRepository)
         {
             _sheetItem = sheetItem;
             _mapper = mapper;
             _subCategoryRepository = subCategoryRepository;
             _dataSourceRepository = dataSourceRepository;
             _currentUserService = currentUserService;
+            _genericRepository = genericRepository;
         }
 
         public async Task<Response<int>> Handle(CreateSheetItemCommand request, CancellationToken cancellationToken)
         {
             try
             {
+                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                if (checkCode != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SheetItem, request.Code));
+
                 var isSubCategoryExist = await _subCategoryRepository.GetByIdAsync(request.SubCategoryId);
                 if (isSubCategoryExist == null)
-                    throw new ApiException($"Data sub kategori dengan id {request.SubCategoryId} tidak ditemukan");
+                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category, request.SubCategoryId));
+
                 if (request.DataSourceId != null)
                 {
                     var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
                     if (isDataSourceExist == null)
-                        throw new ApiException($"Source data dengan id {request.DataSourceId} tidak ditemukan");
+                        throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.DataSourceId));
                 }
                 var res = await _sheetItem.CreateSheetItem(request);
                 if (res > 0)

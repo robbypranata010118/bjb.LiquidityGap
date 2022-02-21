@@ -11,7 +11,8 @@ namespace Bjb.LiquidityGap.WebApi.Examples.Characteristic
             {
                 Code = "BEHAV",
                 Name = "Behavioral",
-                Description = "Description"
+                Description = "Description",
+                CalcDay = 5,
             };
         }
     }

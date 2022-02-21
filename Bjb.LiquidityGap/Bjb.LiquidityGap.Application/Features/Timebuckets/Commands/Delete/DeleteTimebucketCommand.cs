@@ -22,12 +22,14 @@ namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Delete
     public class DeleteTimeBucketCommandHandler : IRequestHandler<DeleteTimeBucketCommand, Response<Unit>>
     {
         private readonly IGenericRepositoryAsync<Timebucket> _genericRepository;
+        private readonly IGenericRepositoryAsync<SheetItem> _sheetItemRepository;
         private readonly IMapper _mapper;
 
-        public DeleteTimeBucketCommandHandler(IGenericRepositoryAsync<Timebucket> genericRepository, IMapper mapper)
+        public DeleteTimeBucketCommandHandler(IGenericRepositoryAsync<Timebucket> genericRepository, IMapper mapper, IGenericRepositoryAsync<SheetItem> sheetItemRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
+            _sheetItemRepository = sheetItemRepository;
         }
 
         public async Task<Response<Unit>> Handle(DeleteTimeBucketCommand request, CancellationToken cancellationToken)
@@ -35,7 +37,12 @@ namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Delete
             var data = await _genericRepository.GetByPredicate(x => x.Id == request.Id && x.IsActive);
             if (data == null)
             {
-                throw new ApiException("Data timebucket tidak ditemukan");
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.Id));
+            }
+            var checkSheetItem = await _sheetItemRepository.GetListByPredicate(x => x.SubCategoryId == request.Id && x.IsActive);
+            if (checkSheetItem.Any())
+            {
+                throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Label, Constant.SheetItem));
             }
             data.IsActive = false;
             await _genericRepository.UpdateAsync(data);
