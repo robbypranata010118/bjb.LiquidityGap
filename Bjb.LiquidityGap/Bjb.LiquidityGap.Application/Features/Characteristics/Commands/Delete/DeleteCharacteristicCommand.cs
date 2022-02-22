@@ -27,12 +27,13 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
         private readonly IGenericRepositoryAsync<SheetItem> _sheetItemRepository;
         private readonly IGenericRepositoryAsync<CharacteristicTimebucket> _chacteristicTimeBucketRepository;
 
-        public DeleteCharacteristicCommandHandler(IGenericRepositoryAsync<Characteristic> genericRepository, IMapper mapper, IGenericRepositoryAsync<SheetItem> sheetItemRepository, IGenericRepositoryAsync<CharacteristicTimebucket> chacteristicTimeBucketRepository)
+        public DeleteCharacteristicCommandHandler(IGenericRepositoryAsync<Characteristic> genericRepository, IMapper mapper, IGenericRepositoryAsync<SheetItem> sheetItemRepository, IGenericRepositoryAsync<CharacteristicTimebucket> chacteristicTimeBucketRepository, IGenericRepositoryAsync<CharacteristicFormula> characteristicFormulaRepository)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
             _sheetItemRepository = sheetItemRepository;
             _chacteristicTimeBucketRepository = chacteristicTimeBucketRepository;
+            _characteristicFormulaRepository = characteristicFormulaRepository;
         }
 
         public async Task<Response<Unit>> Handle(DeleteCharacteristicCommand request, CancellationToken cancellationToken)
@@ -52,6 +53,7 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Delete
             {
                 throw new ApiException(string.Format(Constant.MessageDataCantDeleted, data.Name, Constant.TimeBucket));
             }
+
             var checkCharacteristicFormula = await _characteristicFormulaRepository.GetListByPredicate(x => x.CharacteristicId == request.Id);
             if (checkCharacteristicFormula.Any())
             {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Interfaces;
@@ -32,8 +33,10 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Queries.GetById
 
         public async Task<Response<SheetItemResponse>> Handle(GetSheetItemByIdQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { "SubCategory", "DataSource" };
+            var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SubCategory.Category", "SubCategory", "DataSource" };
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
+            if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.Id));
             var dataVm = _mapper.Map<SheetItemResponse>(data);
             return new Response<SheetItemResponse>(dataVm);
         }

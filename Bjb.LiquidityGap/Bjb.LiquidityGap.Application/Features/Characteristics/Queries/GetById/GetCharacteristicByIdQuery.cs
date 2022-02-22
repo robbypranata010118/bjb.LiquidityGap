@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Wrappers;
@@ -33,6 +34,8 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Queries.GetById
         {
             var includes = new string[] { "CharacteristicFormulas" };
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
+            if (data == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, request.Id));
             var dataVm = _mapper.Map<CharacteristicResponse>(data);
             return new Response<CharacteristicResponse>(dataVm);
         }
