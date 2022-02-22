@@ -31,9 +31,7 @@ namespace Bjb.LiquidityGap.Application.Features.Categories.Commands.Update
         {
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
-            {
                 throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.Category,request.Id));
-            }
            
             if (data.Code != request.Code)
             {

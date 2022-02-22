@@ -35,6 +35,8 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///       Id,
         ///       Code,
         ///       Name,
+        ///       Description,
+        ///       CalcDay,
         ///       DateIn,
         ///       UserIn,
         ///       DateUp,
