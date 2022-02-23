@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace Bjb.LiquidityGap.WebApi.Controllers.v2
 {
     [Authorize]
+    [ApiVersion("2.0")]
     public class AuditTrailController : BaseApiController
     {
         /// <remarks>
