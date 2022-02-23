@@ -41,7 +41,9 @@ namespace Bjb.LiquidityGap.Application.Mappings
             CreateMap<SheetItem, SheetItemResponse>() //Query
             .ForMember(dto => dto.SubCategory, opt => opt.MapFrom(x => x.SubCategory))
             .ForMember(dto => dto.DataSource, opt => opt.MapFrom(x => x.DataSource))
-            .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems));
+            .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems))
+            .ForMember(dto => dto.SheetItemCharacteristic, opt => opt.MapFrom(x => x.SheetItemCharacteristics));
+
 
             CreateMap<SheetItemCharacteristic, SheetItemCharacteristicResponse>()
             .ForMember(dto => dto.Characteristic, opt => opt.MapFrom(x => x.Characteristic));

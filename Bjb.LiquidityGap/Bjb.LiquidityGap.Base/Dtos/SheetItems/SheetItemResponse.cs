@@ -21,7 +21,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItems
         public bool IsManualInput { get; set; }
         public SubCategoryResponse SubCategory { get; set; }
         public DataSourceResponse DataSource { get; set; }
-        public SheetItemCharacteristicResponse SheetItemCharacteristic { get; set; }
+        public List<SheetItemCharacteristicResponse> SheetItemCharacteristic { get; set; }
         public SheetItemResponse SheetChildItems { get; set; }
         public string UserIn { get; set; }
         public DateTime DateIn { get; set; }

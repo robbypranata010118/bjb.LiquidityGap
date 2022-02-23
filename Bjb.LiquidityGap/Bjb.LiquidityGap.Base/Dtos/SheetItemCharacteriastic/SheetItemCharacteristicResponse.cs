@@ -9,6 +9,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic
 {
     public class SheetItemCharacteristicResponse
     {
-        public List<CharacteristicResponse> Characteristic { get; set; }
+        public int Id { get; set; }
+        public CharacteristicResponse Characteristic { get; set; }
     }
 }
