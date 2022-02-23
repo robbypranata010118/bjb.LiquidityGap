@@ -71,6 +71,7 @@ namespace Bjb.LiquidityGap.WebApi
             //services.AddOwnCorsConfiguration(Configuration);
             services.AddSignalR();
             services.AddMemoryCache();
+            services.AddConsulConfig(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +90,7 @@ namespace Bjb.LiquidityGap.WebApi
             app.UseRouting();
             //app.UseCors("DefaultPolicy");
             app.UseAuthentication();
+            app.UseConsul();
             app.UseAuthorization();
             app.UseSwaggerExtension(env, provider);
             app.UseExceptionMiddleware();
