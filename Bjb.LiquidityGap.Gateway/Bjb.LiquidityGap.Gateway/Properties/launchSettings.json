@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -15,7 +15,9 @@
       "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5239",
+      "dotnetRunMessages": true
     },
     "Bjb.LiquidityGap.Gateway": {
       "commandName": "Project",

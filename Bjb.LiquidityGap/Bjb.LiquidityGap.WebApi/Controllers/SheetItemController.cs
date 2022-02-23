@@ -5,6 +5,7 @@ using Bjb.LiquidityGap.Application.Features.SheetItems.Queries.Get;
 using Bjb.LiquidityGap.Application.Features.SheetItems.Queries.GetById;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Wrappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.WebApi.Controllers
 {
+    [Authorize]
     public class SheetItemController : BaseApiController
     {
 
@@ -34,6 +36,8 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
         ///       Id,
         ///       Code,
         ///       Name,
+        ///       MarkToCalculate,
+        ///       IsManualInput,
         ///       DateIn,
         ///       UserIn,
         ///       DateUp,

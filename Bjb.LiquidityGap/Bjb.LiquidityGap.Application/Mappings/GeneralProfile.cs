@@ -4,6 +4,7 @@ using Bjb.LiquidityGap.Base.Dtos.Categories;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Dtos.Currency;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
+using Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
@@ -40,7 +41,12 @@ namespace Bjb.LiquidityGap.Application.Mappings
             CreateMap<SheetItem, SheetItemResponse>() //Query
             .ForMember(dto => dto.SubCategory, opt => opt.MapFrom(x => x.SubCategory))
             .ForMember(dto => dto.DataSource, opt => opt.MapFrom(x => x.DataSource))
-            .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems));
+            .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems))
+            .ForMember(dto => dto.SheetItemCharacteristic, opt => opt.MapFrom(x => x.SheetItemCharacteristics));
+
+
+            CreateMap<SheetItemCharacteristic, SheetItemCharacteristicResponse>()
+            .ForMember(dto => dto.Characteristic, opt => opt.MapFrom(x => x.Characteristic));
             #endregion
 
             #region Characteristic
@@ -50,6 +56,7 @@ namespace Bjb.LiquidityGap.Application.Mappings
                  .ForMember(x => x.CharacteristicFormulas, m => m.MapFrom(x => x.Formula));
             CreateMap<Characteristic, CharacteristicResponse>() //Query
                  .ForMember(x => x.Formulas, m => m.MapFrom(x => x.CharacteristicFormulas));
+
             #endregion
 
             #region Characteristic Formula
@@ -64,7 +71,6 @@ namespace Bjb.LiquidityGap.Application.Mappings
 
             #region Timebucket
             CreateMap<Timebucket, TimeBucketResponse>() //Query
-                                                        //not fix for mapping
             .ForMember(dto => dto.CharacteristicTimebuckets, opt => opt.MapFrom(x => x.CharacteristicTimebuckets));
             #endregion
 

@@ -15,7 +15,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         public string SourceData { get; set; }
         public TimeSpan BussDate { get; set; }
         [MaxLength(10)]
-        public string Password { get; set; }
+        public string Sandi { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal Nominal { get; set; }
         [NotMapped]

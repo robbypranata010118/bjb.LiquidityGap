@@ -22,7 +22,7 @@ namespace Bjb.LiquidityGap.Application.Features.Characteristics.Commands.Update
             RuleFor(x => x.Description)
              .MaximumLength(150).WithMessage("{PropertyName} maksimal 150 karakter");
             RuleFor(x => x.CalcDay)
-              .NotNull();
+              .NotEmpty();
         }
     }
 
