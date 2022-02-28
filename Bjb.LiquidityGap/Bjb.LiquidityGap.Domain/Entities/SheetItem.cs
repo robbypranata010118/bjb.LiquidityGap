@@ -17,6 +17,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         public int? DataSourceId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        [ForeignKey(nameof(SheetItemParent))]
         public int? SheetItemParentId { get; set; }
         public bool MarkToCalculate { get; set; }
         public string Statement { get; set; }
@@ -30,5 +31,6 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [ForeignKey("SheetItemParentId")]
         public virtual ICollection<SheetItem> SheetChildItems { get; set; }
         public virtual ICollection<SheetItemCharacteristic> SheetItemCharacteristics { get; set; }
+        public virtual SheetItem SheetItemParent { get; set; }
     }
 }
