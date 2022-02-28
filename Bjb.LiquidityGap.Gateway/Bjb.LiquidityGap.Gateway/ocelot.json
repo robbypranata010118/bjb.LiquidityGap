@@ -5,7 +5,7 @@
       "DownstreamPathTemplate": "/api/v1/{everything}",
       "DownstreamScheme": "https",
       "ServiceName": "ApplicationService",
-      "UpstreamPathTemplate": "/v1/{everything}",
+      "UpstreamPathTemplate": "/api/v1/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "ReRouteCaseSensitive": false,
       "SwaggerKey": "ApplicationService"
@@ -15,7 +15,7 @@
       "DownstreamPathTemplate": "/api/v2/{everything}",
       "DownstreamScheme": "https",
       "ServiceName": "ApplicationService",
-      "UpstreamPathTemplate": "/v2/{everything}",
+      "UpstreamPathTemplate": "/api/v2/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "ReRouteCaseSensitive": false,
       "SwaggerKey": "ApplicationService"

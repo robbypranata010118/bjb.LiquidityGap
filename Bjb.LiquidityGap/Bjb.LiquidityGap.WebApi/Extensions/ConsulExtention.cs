@@ -29,7 +29,7 @@ namespace Bjb.LiquidityGap.WebApi.Extensions
                 ID = $"ApplicationService-Id",
                 Name = "ApplicationService",
                 Address = "localhost",
-                Port = 44305,
+                Port = 5001,
                 Tags = new string[] { "Application" , "NET5" }
             };
             logger.LogInformation("Register to consul");
