@@ -86,7 +86,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("AuditTrails");
+                    b.ToTable("AuditTrails", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.Category", b =>
@@ -131,7 +131,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.Characteristic", b =>
@@ -183,7 +183,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("Characteristics");
+                    b.ToTable("Characteristics", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.CharacteristicFormula", b =>
@@ -230,7 +230,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("CharacteristicFormulas");
+                    b.ToTable("CharacteristicFormulas", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.CharacteristicTimebucket", b =>
@@ -282,7 +282,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TimebucketId");
 
-                    b.ToTable("CharacteristicTimebuckets");
+                    b.ToTable("CharacteristicTimebuckets", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.Currency", b =>
@@ -326,7 +326,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.DataSource", b =>
@@ -368,7 +368,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("DataSources");
+                    b.ToTable("DataSources", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.LiquidityGap", b =>
@@ -418,7 +418,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SheetItemId");
 
-                    b.ToTable("LiquidityGaps");
+                    b.ToTable("LiquidityGaps", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.LiquidityGapBucket", b =>
@@ -473,7 +473,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TimeBucketId");
 
-                    b.ToTable("LiquidityGapBuckets");
+                    b.ToTable("LiquidityGapBuckets", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.SheetItem", b =>
@@ -536,7 +536,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("SheetItems");
+                    b.ToTable("SheetItems", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.SheetItemCharacteristic", b =>
@@ -579,7 +579,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SheetItemId");
 
-                    b.ToTable("SheetItemCharacteristics");
+                    b.ToTable("SheetItemCharacteristics", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.SubCategory", b =>
@@ -625,7 +625,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("SubCategories");
+                    b.ToTable("SubCategories", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.SummarySource", b =>
@@ -672,7 +672,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("SummarySources");
+                    b.ToTable("SummarySources", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.Timebucket", b =>
@@ -714,7 +714,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IsActive");
 
-                    b.ToTable("Timebuckets");
+                    b.ToTable("Timebuckets", (string)null);
                 });
 
             modelBuilder.Entity("Bjb.LiquidityGap.Domain.Entities.CharacteristicFormula", b =>
