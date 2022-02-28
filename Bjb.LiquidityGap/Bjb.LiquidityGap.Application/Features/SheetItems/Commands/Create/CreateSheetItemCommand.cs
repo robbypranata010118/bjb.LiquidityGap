@@ -43,7 +43,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
         {
             try
             {
-                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code);
                 if (checkCode != null)
                     throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SheetItem, request.Code));
 
@@ -55,8 +55,11 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
                 {
                     var isDataSourceExist = await _dataSourceRepository.GetByIdAsync(request.DataSourceId.Value);
                     if (isDataSourceExist == null)
-                        throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.DataSourceId));
+                        throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.DataSourceId));
                 }
+                var checkSheetParent = await _genericRepository.GetByPredicate(x => x.Id == request.SheetItemParentId);
+                if (checkSheetParent == null)
+                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.SheetItemParentId));
                 var res = await _sheetItem.CreateSheetItem(request);
                 if (res > 0)
                 {
