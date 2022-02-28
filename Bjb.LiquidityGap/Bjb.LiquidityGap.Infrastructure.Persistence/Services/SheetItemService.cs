@@ -29,8 +29,8 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 await _appDbContext.Database.BeginTransactionAsync();
                 var checkCharacteriticId = await _appDbContext.Characteristics.Where(x => request.SheetItemCharacteristics.Contains(x.Id)).Select(x => x.Id).ToListAsync();
                 var idNotExist = request.SheetItemCharacteristics.Except(checkCharacteriticId).ToList();
-                if (idNotExist == null)
-                throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.Characteristic, $"{String.Join(" dan ", idNotExist.Select(x => x.ToString()))}"));
+                if (checkCharacteriticId.Count == 0)
+                    throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.Characteristic, $"{String.Join(" dan ", idNotExist.Select(x => x.ToString()))}"));
                 SheetItem sheetItem = new SheetItem
                 {
                     SubCategoryId = request.SubCategoryId,

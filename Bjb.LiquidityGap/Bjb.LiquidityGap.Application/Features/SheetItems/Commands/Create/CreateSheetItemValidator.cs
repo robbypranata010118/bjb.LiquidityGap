@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
 {
-    internal class CreateSheetItemValidator : AbstractValidator<CreateSheetItemCommand>
+    public class CreateSheetItemValidator : AbstractValidator<CreateSheetItemCommand>
     {
         public CreateSheetItemValidator()
         {

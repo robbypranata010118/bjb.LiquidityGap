@@ -54,7 +54,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
 
             if (data.Code != request.Code)
             {
-                var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
+                var checkCode = await _sheetItemRepository.GetByPredicate(x => x.Code == request.Code);
                 if (checkCode != null)
                     throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.SheetItem, request.Code));
             }
@@ -69,6 +69,9 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Update
                 if (isDataSourceExist == null)
                     throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.DataSourceId));
             }
+            var checkSheetParent = await _sheetItemRepository.GetByPredicate(x => x.Id == request.SheetItemParentId);
+            if (checkSheetParent == null)
+                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.SheetItemParentId));
             foreach (var item in request.SheetItemCharacteristics)
             {
                 var isCharacteristicExist = await _characteristicRepository.GetByIdAsync(item);
