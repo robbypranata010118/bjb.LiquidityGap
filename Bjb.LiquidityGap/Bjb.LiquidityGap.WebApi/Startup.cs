@@ -68,7 +68,7 @@ namespace Bjb.LiquidityGap.WebApi
             services.AddJWTExtension(Configuration);
             services.AddPersistenceInfrastructure(Configuration);
             services.AddHttpContextAccessor();
-            //services.AddOwnCorsConfiguration(Configuration);
+            services.AddOwnCorsConfiguration(Configuration);
             services.AddSignalR();
             services.AddMemoryCache();
             services.AddConsulConfig(Configuration);
@@ -88,7 +88,7 @@ namespace Bjb.LiquidityGap.WebApi
             }
             //app.UseHttpsRedirection();
             app.UseRouting();
-            //app.UseCors("DefaultPolicy");
+            app.UseCors("DefaultPolicy");
             app.UseAuthentication();
             app.UseConsul();
             app.UseAuthorization();
