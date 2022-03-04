@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,6 +13,7 @@ namespace Bjb.LiquidityGap.WebApi.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [SwaggerTag]
+    [DisableCors]
     public class BaseApiController : ControllerBase
     {
         private IMediator _mediator;

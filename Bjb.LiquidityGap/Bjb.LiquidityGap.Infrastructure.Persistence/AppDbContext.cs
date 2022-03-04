@@ -39,5 +39,9 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
                 .HasIndex(u => u.Code)
                 .IsUnique();
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine);
+        }
     }
 }

@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Bjb.LiquidityGap.Infrastructure.Persistence</AssemblyName>
     <RootNamespace>Bjb.LiquidityGap.Infrastructure.Persistence</RootNamespace>
+    <IsPublishable>True</IsPublishable>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Seeders\" />
   </ItemGroup>
 

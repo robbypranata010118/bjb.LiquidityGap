@@ -31,6 +31,7 @@ namespace Bjb.LiquidityGap.Gateway
 
             services.AddOcelot(Configuration).AddConsul();
             services.AddSwaggerForOcelot(Configuration);
+            services.AddOwnCorsConfiguration(Configuration);
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
         }
 
@@ -41,6 +42,7 @@ namespace Bjb.LiquidityGap.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("DefaultPolicy");
             app.UseSwagger();
             app.UseStaticFiles();
             app.UseSwaggerForOcelotUI().UseOcelot().Wait();

@@ -7,6 +7,15 @@ using Microsoft.EntityFrameworkCore;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
 using Bjb.LiquidityGap.Application.Exceptions;
 using Bjb.LiquidityGap.Application;
+using System.Collections.Generic;
+using Bjb.LiquidityGap.Base.Parameters;
+using Bjb.LiquidityGap.Infrastructure.Persistence.Extensions;
+using Bjb.LiquidityGap.Base.Dtos.DataSources;
+using Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic;
+using Bjb.LiquidityGap.Base.Dtos.Characteristics;
+using Bjb.LiquidityGap.Base.Dtos.SubCategories;
+using Bjb.LiquidityGap.Base.Dtos.Categories;
+//using System.Linq.Dynamic.Core;
 
 namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
 {
@@ -188,6 +197,114 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 await _appDbContext.Database.RollbackTransactionAsync();
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<List<SheetItemResponse>> GetSheetItem(RequestParameter request)
+        {
+            var predicate = PredicateBuilder.Create<SheetItem>(x => 1 == 1);
+            if (request.Filters.Count > 0)
+            {
+                foreach (var f in request.Filters)
+                {
+                    if (f.Field == "sheetItemCharacteristics.characteristic.code")
+                        predicate = predicate.And(x => x.SheetItemCharacteristics.Any(x => x.Characteristic.Code == f.Value));
+                }
+            }
+
+            return await _appDbContext.SheetItems
+                .Include(x => x.SheetChildItems)
+                .Include(x => x.SheetItemCharacteristics)
+                    .ThenInclude(x => x.Characteristic)
+                        .ThenInclude(x => x.CharacteristicFormulas)
+                .Include(x => x.SubCategory)
+                    .ThenInclude(x => x.Category)
+                .Include(x => x.DataSource)
+                .Include(x => x.SheetItemParent)
+                .Where(predicate)
+                .Select(x => new SheetItemResponse
+                {
+                    Id = x.Id,
+                    Code = x.Code,
+                    IsActive = x.IsActive,
+                    IsManualInput = x.IsManualInput,
+                    MarkToCalculate = x.MarkToCalculate,
+                    DateIn = x.DateIn,
+                    UserIn = x.UserIn,
+                    DateUp = x.DateUp,
+                    UserUp = x.UserUp,
+                    Name = x.Name,
+                    Statement = x.Statement,
+                    SheetItemCharacteristics = x.SheetItemCharacteristics.Select(a => new SheetItemCharacteristicResponse
+                    {
+                        Characteristic = new CharacteristicResponse
+                        {
+                            Id = a.Characteristic.Id,
+                            Code = a.Characteristic.Code,
+                            CalcDay = a.Characteristic.CalcDay,
+                            DateIn = a.Characteristic.DateIn,
+                            DateUp = a.Characteristic.DateUp,
+                            Description = a.Characteristic.Description,
+                            IsActive = a.Characteristic.IsActive,
+                            Name = a.Characteristic.Name,
+                            UserIn = a.UserIn,
+                            UserUp = a.UserUp,
+                            Formulas = a.Characteristic.CharacteristicFormulas.Select(b => new CharacteristicFormulaResponse
+                            {
+                                Id = b.Id,
+                                Formula = b.Formula,
+                                Name = b.Name,
+                                Sequence = b.Sequence
+                            }).OrderBy(b => b.Sequence).ToList()
+                        }
+                    }).ToList(),
+                    DataSource = x.DataSource == null ? null : new DataSourceResponse
+                    {
+                        Id = x.DataSource.Id,
+                        Name = x.DataSource.Name,
+                        ConnString = x.DataSource.ConnString,
+                        UseEtl = x.DataSource.UseETL,
+                        IsActive = x.DataSource.IsActive,
+                        UserIn = x.DataSource.UserIn,
+                        DateIn = x.DataSource.DateIn,
+                        UserUp = x.DataSource.UserUp,
+                        DateUp = x.DataSource.DateUp
+                    },
+                    SheetChildItems = x.SheetChildItems.Select(c => new SheetItemSimpleResponse
+                    {
+                        Code = c.Code,
+                        Id = c.Id,
+                        Name = c.Name
+                    }).ToList(),
+                    SheetItemParent = x.SheetItemParent == null ? null : new SheetItemSimpleResponse
+                    {
+                        Name = x.SheetItemParent.Name,
+                        Id = x.SheetItemParent.Id,
+                        Code = x.SheetItemParent.Code,
+                    },
+                    SubCategory = new SubCategoryResponse
+                    {
+                        Id = x.SubCategory.Id,
+                        Code = x.SubCategory.Code,
+                        Name = x.SubCategory.Name,
+                        Category = new CategoryResponse
+                        {
+                            Id = x.SubCategory.Category.Id,
+                            Code = x.SubCategory.Category.Name,
+                            Name = x.SubCategory.Category.Name,
+                            IsActive = x.SubCategory.Category.IsActive,
+                            UserIn = x.SubCategory.Category.UserIn,
+                            DateIn = x.SubCategory.Category.DateIn,
+                            UserUp = x.SubCategory.Category.UserUp,
+                            DateUp = x.SubCategory.Category.DateUp
+                        },
+                        IsActive = x.SubCategory.IsActive,
+                        UserIn = x.SubCategory.UserIn,
+                        DateIn = x.SubCategory.DateIn,
+                        UserUp = x.SubCategory.UserUp,
+                        DateUp = x.SubCategory.DateUp
+                    }
+                })
+            .ToListAsync();
         }
     }
 }

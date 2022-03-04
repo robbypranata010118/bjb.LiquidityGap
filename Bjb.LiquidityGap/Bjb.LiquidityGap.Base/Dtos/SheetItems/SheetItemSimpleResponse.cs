@@ -8,7 +8,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItems
 {
     public class SheetItemSimpleResponse
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Code { get; set; }    
         public string Name { get; set; }
     }
