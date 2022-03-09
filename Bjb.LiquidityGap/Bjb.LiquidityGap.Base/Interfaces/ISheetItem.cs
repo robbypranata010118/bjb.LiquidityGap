@@ -8,7 +8,7 @@ namespace Bjb.LiquidityGap.Base.Interfaces
 {
     public interface ISheetItem
     {
-        Task<List<SheetItemResponse>> GetSheetItem(RequestParameter request);
+        Task<SheetItemVm> GetSheetItem(RequestParameter request);
         Task<int> CreateSheetItem(AddSheetItemRequest sheetItem);
         Task<int> EditSheetItem(UpdateSheetItemRequest sheetItem);
     }

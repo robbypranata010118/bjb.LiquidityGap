@@ -5,7 +5,6 @@ using Bjb.LiquidityGap.Base.Interfaces;
 using Bjb.LiquidityGap.Base.Parameters;
 using Bjb.LiquidityGap.Base.Wrappers;
 using Bjb.LiquidityGap.Domain.Common;
-using Bjb.LiquidityGap.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -71,13 +70,12 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
             {
                 CurrentPage = request.Page,
                 Length = request.Length,
-                TotalPage = (int)Math.Ceiling((decimal)await data.CountAsync() / request.Length)
+                TotalPage = await data.CountAsync()
             };
             data = _Orders(data, request.Orders, request.SortType);
             if (request.Page > 0 && request.Length > 0)
             {
                 data = data
-                .Where(r => _isDeactivable ? (r as IDeactivable).IsActive : true)
                 .Skip((request.Page - 1) * request.Length)
                 .Take(request.Length);
             }
@@ -92,7 +90,6 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         {
             return await _dbContext
                 .Set<T>()
-                .Where(r => _isDeactivable ? (r as IDeactivable).IsActive : true)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
@@ -147,13 +144,13 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                     RoleName = _currentUserService.IdFungsi,
                     UserId = _currentUserService.UserId,
                     UserName = _currentUserService.UserName,
-                    
+
                 };
                 await _logService.InsertLog(log);
-                
+
 
             }
-            
+
             await _dbContext.SaveChangesAsync();
             return entity;
         }
@@ -200,7 +197,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
             _dbContext.Set<T>().Update(entity);
             if (_isAudit)
             {
-               
+
                 AuditTrailRequest log = new AuditTrailRequest
                 {
                     Id = Guid.NewGuid(),
@@ -217,7 +214,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                     UserId = _currentUserService.UserId,
                     UserName = _currentUserService.UserName
                 };
-                await _logService.InsertLog(log);               
+                await _logService.InsertLog(log);
             }
             await _dbContext.SaveChangesAsync();
         }
@@ -250,7 +247,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                     (entity as IAudit).DateUp = DateTime.Now;
                 }
             }
-            
+
             await _dbContext.SaveChangesAsync();
         }
         public async Task DeleteRangeAsync(List<T> entities)
@@ -274,7 +271,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
         {
             var query = _dbContext
                  .Set<T>()
-                 .Where(r => _isDeactivable ? (r as IDeactivable).IsActive : true)
+                 //.Where(r => _isDeactivable ? (r as IDeactivable).IsActive : true)
                  .AsQueryable();
             query = _Includes(query, includes);
             return await query.AsNoTracking()
@@ -396,21 +393,32 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Repositories
                     if (filter.Type != "raw")
                     {
                         query = query.Where(
-                        string.Format(
-                            "{0}{5}{1}{3}{2}{3}{4}"
-                            , filter.Field
-                            , _GetComparisonOperator(filter.ComparisonOperator)
-                            , _GetValue(filter.GetFilterValue())
-                            , _IsUseDoubleQuote(filter.GetFilterValue()) ? "\"" : ""
-                            , _GetClosedTagComparisonOperator(filter.ComparisonOperator)
-                            , _GetConverter(filter.GetFilterValue())
-                            )
-                        );
+                         string.Format(
+                             "{0}{5}{1}{3}{2}{3}{4}"
+                             , filter.Field
+                             , _GetComparisonOperator(filter.ComparisonOperator)
+                             , _GetValue(filter.GetFilterValue())
+                             , _IsUseDoubleQuote(filter.GetFilterValue()) ? "\"" : ""
+                             , _GetClosedTagComparisonOperator(filter.ComparisonOperator)
+                             , _GetConverter(filter.GetFilterValue())
+                             )
+                         );
                     }
                     else
                     {
-                        query = query.Where((string)filter.GetFilterValue());
+                        var predicate = string.Format(
+                           "{0}{5}{1}{3}{2}{3}{4}"
+                           , $"{filter.Field.Split(".")[1]}.{ filter.Field.Split(".")[2]}"
+                           , _GetComparisonOperator(filter.ComparisonOperator)
+                           , _GetValue(filter.GetFilterValue())
+                           , _IsUseDoubleQuote(filter.GetFilterValue()) ? "\"" : ""
+                           , _GetClosedTagComparisonOperator(filter.ComparisonOperator)
+                           , _GetConverter(filter.GetFilterValue())
+                           );
+                        query = query.Where($"{filter.Field.Split(".")[0]}.Any({predicate})");
                     }
+
+
                 }
             }
             return query;

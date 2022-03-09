@@ -32,12 +32,12 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyBaseEntityConfiguration();
-            builder.Entity<Category>()
-                .HasIndex(u => u.Code)
-                .IsUnique();
-            builder.Entity<Characteristic>()
-                .HasIndex(u => u.Code)
-                .IsUnique();
+            //builder.Entity<Category>()
+            //    .HasIndex(u => u.Code)
+            //    .IsUnique();
+            //builder.Entity<Characteristic>()
+            //    .HasIndex(u => u.Code)
+            //    .IsUnique();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

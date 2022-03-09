@@ -15,7 +15,9 @@ using Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic;
 using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Base.Dtos.Categories;
-//using System.Linq.Dynamic.Core;
+using Bjb.LiquidityGap.Base.Wrappers;
+using System.Linq.Dynamic.Core;
+using Bjb.LiquidityGap.Base.Extensions;
 
 namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
 {
@@ -199,19 +201,38 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
             }
         }
 
-        public async Task<List<SheetItemResponse>> GetSheetItem(RequestParameter request)
+        public async Task<SheetItemVm> GetSheetItem(RequestParameter request)
         {
             var predicate = PredicateBuilder.Create<SheetItem>(x => 1 == 1);
             if (request.Filters.Count > 0)
             {
                 foreach (var f in request.Filters)
                 {
-                    if (f.Field == "sheetItemCharacteristics.characteristic.code")
-                        predicate = predicate.And(x => x.SheetItemCharacteristics.Any(x => x.Characteristic.Code == f.Value));
+                    switch (f.Field)
+                    {
+                        case "sheetItemCharacteristics.characteristic.name":
+                            predicate = predicate.And(x => x.SheetItemCharacteristics.Any(x => x.Characteristic.Name.Contains(f.Value)));
+                            break;
+                        case "code":
+                            predicate = predicate.And(x => x.Code == f.Value);
+                            break;
+                        case "name":
+                            predicate = predicate.And(x => x.Name == f.Value);
+                            break;
+                        case "markToCalculated":
+                            predicate = predicate = predicate.And(x => x.MarkToCalculate == Convert.ToBoolean(f.Value));
+                            break;
+                        case "isManualInput":
+                            predicate = predicate.And(x => x.IsManualInput == Convert.ToBoolean(f.Value));
+                            break;
+                        default:
+                            predicate = predicate.And(x => 1 == 1);
+                            break;
+                    }
                 }
             }
 
-            return await _appDbContext.SheetItems
+            var datas = _appDbContext.SheetItems
                 .Include(x => x.SheetChildItems)
                 .Include(x => x.SheetItemCharacteristics)
                     .ThenInclude(x => x.Characteristic)
@@ -257,6 +278,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                             }).OrderBy(b => b.Sequence).ToList()
                         }
                     }).ToList(),
+                    Characteristics = String.Join(",", x.SheetItemCharacteristics.Select(x => x.Characteristic.Name)),
                     DataSource = x.DataSource == null ? null : new DataSourceResponse
                     {
                         Id = x.DataSource.Id,
@@ -304,7 +326,24 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                         DateUp = x.SubCategory.DateUp
                     }
                 })
-            .ToListAsync();
+            .AsQueryable();
+            if (request.Orders != null && request.Orders.Count > 0)
+            {
+                foreach (var item in request.Orders)
+                {
+                    datas = datas.OrderBy(item + " " + request.SortType);
+                }
+            };
+            return new SheetItemVm
+            {
+                Results = await datas.Skip(request.Page).Take(request.Length).ToListAsync(),
+                Info = new PagedInfoRepositoryResponse
+                {
+                    CurrentPage = request.Page,
+                    TotalPage = await datas.CountAsync(),
+                    Length = request.Length
+                }
+            };
         }
     }
 }
