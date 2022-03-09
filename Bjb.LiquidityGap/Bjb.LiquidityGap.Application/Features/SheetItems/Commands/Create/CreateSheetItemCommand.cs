@@ -57,18 +57,22 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
                     if (isDataSourceExist == null)
                         throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.DataSourceId));
                 }
-                var checkSheetParent = await _genericRepository.GetByPredicate(x => x.Id == request.SheetItemParentId);
-                if (checkSheetParent == null)
-                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.SheetItemParentId));
-                var res = await _sheetItem.CreateSheetItem(request);
-                if (res > 0)
+                if (request.SheetItemParentId > 0 && request.SheetItemParentId != null)
                 {
-                    return new Response<int>(res) { StatusCode = (int)HttpStatusCode.Created };
+                    var checkSheetParent = await _genericRepository.GetByPredicate(x => x.Id == request.SheetItemParentId);
+                    if (checkSheetParent == null)
+                        throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.SheetItemParentId));
                 }
-                else
-                {
-                    return new Response<int>(0) { StatusCode = (int)HttpStatusCode.Created };
-                }
+                    var res = await _sheetItem.CreateSheetItem(request);
+                    if (res > 0)
+                    {
+                        return new Response<int>(res) { StatusCode = (int)HttpStatusCode.Created };
+                    }
+                    else
+                    {
+                        return new Response<int>(0) { StatusCode = (int)HttpStatusCode.Created };
+                    }
+                
             }
             catch (Exception ex)
             {
