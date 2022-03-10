@@ -24,27 +24,18 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Queries.Get
     {
         private readonly IGenericRepositoryAsync<SheetItem> _genericRepository;
         private readonly IMapper _mapper;
-        private readonly ISheetItem _sheetItem;
-        public GetSheetItemQueryHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper, ISheetItem sheetItem)
+        public GetSheetItemQueryHandler(IGenericRepositoryAsync<SheetItem> genericRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
             _mapper = mapper;
-            _sheetItem = sheetItem;
         }
 
         public async Task<PagedResponse<IEnumerable<SheetItemResponse>>> Handle(GetSheetItemQuery request, CancellationToken cancellationToken)
         {
-            //var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
-            //var data = await _sheetItem.GetPagedReponseAsync(request, includes);
-            //var dataVm = _mapper.Map<IEnumerable<SheetItemResponse>>(data.Results);
-            var data = await _sheetItem.GetSheetItem(request);
-            PagedInfoRepositoryResponse info = new PagedInfoRepositoryResponse
-            {
-                CurrentPage = 1,
-                Length = request.Length,
-                TotalPage = request.Page
-            };
-            return new PagedResponse<IEnumerable<SheetItemResponse>>(data, info, request.Page, request.Length)
+            var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
+            var data = await _genericRepository.GetPagedReponseAsync(request, includes);
+            var dataVm = _mapper.Map<IEnumerable<SheetItemResponse>>(data.Results);
+            return new PagedResponse<IEnumerable<SheetItemResponse>>(dataVm, data.Info, request.Page, request.Length)
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
