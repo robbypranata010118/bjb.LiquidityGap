@@ -31,6 +31,21 @@ namespace Bjb.LiquidityGap.Application.Features.Auth.Queries
             var user = _currentUserService;
             UserMeResponse data = new UserMeResponse
             {
+                Nama = user.Nama,
+                NIP = user.NIP,
+                KodeCabang = user.KodeCabang,
+                NamaCabang = user.NamaCabang,
+                KodeInduk = user.KodeInduk,
+                NamaInduk = user.NamaInduk,
+                KodeKanwil = user.KodeKanwil,
+                NamaKanwil = user.NamaKanwil,
+                Jabatan = user.Jabatan,
+                PosisiPenempatan = user.PosisiPenempatan,
+                Hp = user.Hp,
+                Email = user.Email,
+                KodeGrade = user.KodeGrade,
+                NamaGrade = user.NamaGrade,
+                FungsiTambahan = user.FungsiTambahan,
                 UserId = user.UserId,
                 UserName = user.UserName,
                 IdFungsi = user.IdFungsi,

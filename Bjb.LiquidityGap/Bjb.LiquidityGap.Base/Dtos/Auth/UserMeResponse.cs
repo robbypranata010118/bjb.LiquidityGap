@@ -8,6 +8,21 @@ namespace Bjb.LiquidityGap.Base.Dtos.Auth
 {
     public class UserMeResponse
     {
+        public string Nama { get; set; }
+        public string NIP { get; set; }
+        public string KodeCabang { get; set; }
+        public string NamaCabang { get; set; }
+        public string KodeInduk { get; set; }
+        public string NamaInduk { get; set; }
+        public string KodeKanwil { get; set; }
+        public string NamaKanwil { get; set; }
+        public string Jabatan { get; set; }
+        public string PosisiPenempatan { get; set; }
+        public string Hp { get; set; }
+        public string Email { get; set; }
+        public string KodeGrade { get; set; }
+        public string NamaGrade { get; set; }
+        public string FungsiTambahan { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string IdFungsi { get; set; }

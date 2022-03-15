@@ -44,6 +44,21 @@ namespace Bjb.LiquidityGap.Application.Features.Auth.Commands.LoginUIM
                 {
                     var claims = new[]
                     {
+                        new Claim("Nama" ,  res.Data.Nama),
+                        new Claim("NIP" ,  res.Data.NIP),
+                        new Claim("KodeCabang" ,  res.Data.KodeCabang),
+                        new Claim("NamaCabang" ,  res.Data.NamaCabang),
+                        new Claim("KodeInduk" ,  res.Data.KodeInduk),
+                        new Claim("NamaInduk" ,  res.Data.NamaInduk),
+                        new Claim("KodeKanwil" ,  res.Data.KodeKanwil),
+                        new Claim("NamaKanwil" ,  res.Data.NamaKanwil),
+                        new Claim("Jabatan" ,  res.Data.Jabatan),
+                        new Claim("PosisiPenempatan" ,  res.Data.PosisiPenempatan),
+                        new Claim("Hp" ,  res.Data.Hp),
+                        new Claim("Email" ,  res.Data.Email),
+                        new Claim("KodeGrade" ,  res.Data.KodeGrade),
+                        new Claim("NamaGrade" ,  res.Data.NamaGrade),
+                        new Claim("FungsiTambahan" ,  res.Data.FungsiTambahan),
                         new Claim("UserId" ,  res.Data.UserId),
                         new Claim("UserName" ,  res.Data.Nama),
                         new Claim("IdFungsi" ,  res.Data.IdFungsi)
@@ -73,8 +88,23 @@ namespace Bjb.LiquidityGap.Application.Features.Auth.Commands.LoginUIM
                 var res = await _uimService.Login(request);
                 if (res.Status == StatusEnum.SUCCESS)
                 {
-                    var claims = new []
+                    var claims = new[]
                     {
+                       new Claim("Nama" ,  res.Data.Nama),
+                        new Claim("NIP" ,  res.Data.NIP),
+                        new Claim("KodeCabang" ,  res.Data.KodeCabang),
+                        new Claim("NamaCabang" ,  res.Data.NamaCabang),
+                        new Claim("KodeInduk" ,  res.Data.KodeInduk),
+                        new Claim("NamaInduk" ,  res.Data.NamaInduk),
+                        new Claim("KodeKanwil" ,  res.Data.KodeKanwil),
+                        new Claim("NamaKanwil" ,  res.Data.NamaKanwil),
+                        new Claim("Jabatan" ,  res.Data.Jabatan),
+                        new Claim("PosisiPenempatan" ,  res.Data.PosisiPenempatan),
+                        new Claim("Hp" ,  res.Data.Hp),
+                        new Claim("Email" ,  res.Data.Email),
+                        new Claim("KodeGrade" ,  res.Data.KodeGrade),
+                        new Claim("NamaGrade" ,  res.Data.NamaGrade),
+                        new Claim("FungsiTambahan" ,  res.Data.FungsiTambahan),
                         new Claim("UserId" ,  res.Data.UserId),
                         new Claim("UserName" ,  res.Data.Nama),
                         new Claim("IdFungsi" ,  res.Data.IdFungsi)
