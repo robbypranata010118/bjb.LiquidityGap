@@ -18,7 +18,7 @@ namespace Bjb.LiquidityGap.Application.Features.DataSources.Commands.Create
             RuleFor(x => x.ConnString)
               .MinimumLength(1).WithMessage("{PropertyName} minimal 1 karakter");
             RuleFor(x => x.UseEtl)
-              .NotEmpty();
+              .NotNull();
 
         }
     }

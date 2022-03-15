@@ -65,7 +65,7 @@ namespace Bjb.LiquidityGap.Application.Features.Auth.Commands.LoginUIM
                 }
                 else
                 {
-                    throw new BadRequestException(message: $"{res.Message}");
+                    throw new BadRequestException(message: $"{"Invalid username or password"}");
                 }
             }
             else
@@ -96,7 +96,7 @@ namespace Bjb.LiquidityGap.Application.Features.Auth.Commands.LoginUIM
                 }
                 else
                 {
-                    throw new BadRequestException(message: $"{res.Message}");
+                    throw new BadRequestException(message: $"{"Invalid username or password"}");
                 }
             }
         }

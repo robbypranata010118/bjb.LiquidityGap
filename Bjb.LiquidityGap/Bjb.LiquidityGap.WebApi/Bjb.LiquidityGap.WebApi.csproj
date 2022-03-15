@@ -32,7 +32,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\LogController.cs" />
     <Compile Remove="Controllers\ProductController.cs" />
-    <Compile Remove="Controllers\UserController.cs" />
     <Compile Remove="Controllers\v2\TestController.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -58,5 +58,6 @@ namespace Bjb.LiquidityGap.Application
         public const string MessageDataNotFound = "Data {0} dengan {1} tidak ditemukan";
         public const string MessageDataUnique = "Data {0} dengan code {1} sudah terdaftar silahkan gunakan code lain";
         public const string MessageDataCantDeleted = "Data {0} tidak bisa di hapus karena sedang digunakan oleh {1}";
+        public const string MesasageUserExists = "User tidak di temukan";
     }
 }
