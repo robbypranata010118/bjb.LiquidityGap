@@ -11,6 +11,6 @@ namespace Bjb.LiquidityGap.Base.Dtos.TimeBuckets
         public string Code { get; set; }
         public string Label { get; set; }
         public int Sequence { get; set; }
-        public AddCharacteristicTimeBucketRequest CharacteristicTimebuckets { get; set; }
+        public ICollection<AddCharacteristicTimeBucketRequest> CharacteristicTimebuckets { get; set; }
     }
 }

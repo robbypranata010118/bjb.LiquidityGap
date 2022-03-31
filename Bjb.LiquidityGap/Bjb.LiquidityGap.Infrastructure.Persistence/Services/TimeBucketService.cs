@@ -29,9 +29,29 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
             try
             {
                 await _appDbContext.Database.BeginTransactionAsync();
-                var checkCharacteriticId = await _appDbContext.Characteristics.Where(x => request.CharacteristicTimebuckets.CharacteristicId == x.Id).FirstOrDefaultAsync();
-                if (checkCharacteriticId == null)
-                    throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, request.CharacteristicTimebuckets.CharacteristicId));
+                foreach (var checkCharacteristic in request.CharacteristicTimebuckets)
+                {
+                    var checkCharacteriticId = await _appDbContext.Characteristics.Where(x => checkCharacteristic.CharacteristicId == x.Id).FirstOrDefaultAsync();
+                    if (checkCharacteriticId == null)
+                        throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, checkCharacteristic.CharacteristicId));
+                }
+
+
+                var listCharTimeBucket = new List<CharacteristicTimebucket>();
+                foreach (var dataChar in request.CharacteristicTimebuckets)
+                {
+                    listCharTimeBucket.Add(new CharacteristicTimebucket
+                    {
+                        CharacteristicId = dataChar.CharacteristicId,
+                        UsePercentage = dataChar.UsePercentage,
+                        DayRange = dataChar.DayRange,
+                        Percentage = dataChar.Percentage,
+                        UserIn = _currentUserService.UserId,
+                        DateIn = DateTime.Now,
+                        IsActive = true,
+                    });
+                }
+
                 Timebucket timeBucket = new Timebucket
                 {
                     Code = request.Code,
@@ -40,19 +60,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                     UserIn = _currentUserService.UserId,
                     DateIn = DateTime.Now,
                     IsActive = true,
-                    CharacteristicTimebuckets = new List<CharacteristicTimebucket>
-                    {
-                        new CharacteristicTimebucket
-                        {
-                            CharacteristicId = request.CharacteristicTimebuckets.CharacteristicId,
-                            UsePercentage = request.CharacteristicTimebuckets.UsePercentage,
-                            DayRange = request.CharacteristicTimebuckets.DayRange,
-                            Percentage = request.CharacteristicTimebuckets.Percentage,
-                            UserIn = _currentUserService.UserId,
-                            DateIn = DateTime.Now,
-                            IsActive = true,
-                        }
-                    }
+                    CharacteristicTimebuckets = listCharTimeBucket
                 };
                 await _appDbContext.Timebuckets.AddAsync(timeBucket);
                 await _appDbContext.SaveChangesAsync();
@@ -71,65 +79,78 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
             try
             {
                 await _appDbContext.Database.BeginTransactionAsync();
-                var timeBucketCharacteristics = await _appDbContext.CharacteristicTimebuckets.Where(x => x.CharacteristicId == timeBucket.CharacteristicTimebuckets.CharacteristicId).FirstOrDefaultAsync();
+
+                var timeBucketCharacteristics = await _appDbContext.CharacteristicTimebuckets.Where(x => x.TimebucketId == timeBucket.Id).ToListAsync();
                 //should be 3 in here
-                var characteristicInRequest = timeBucket.CharacteristicTimebuckets.CharacteristicId;
+                var characteristicInRequest = timeBucket.CharacteristicTimebuckets.ToList();
+
                 #region Delete
-
-                timeBucketCharacteristics.IsActive = false;
-                timeBucketCharacteristics.UserUp = _currentUserService.UserId;
-                timeBucketCharacteristics.DateUp = DateTime.Now;
-                _appDbContext.CharacteristicTimebuckets.Update(timeBucketCharacteristics);
-                await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                foreach (var item in timeBucketCharacteristics)
                 {
-                    Id = Guid.NewGuid(),
-                    Action = Constant.ACTION_UPDATE,
-                    ApplicationName = Constant.NAMA_APLIKASI,
-                    Detail = "",
-                    Feature = "Time Bucket Characteristic",
-                    LogDate = DateTime.Now,
-                    Message = "Success",
-                    Module = "Master Data",
-                    ReferenceId = timeBucketCharacteristics.Id.ToString(),
-                    RoleId = _currentUserService.IdFungsi,
-                    RoleName = _currentUserService.IdFungsi,
-                    UserId = _currentUserService.UserId,
-                    UserName = _currentUserService.UserName,
-                });
-
+                    item.IsActive = false;
+                    item.UserUp = _currentUserService.UserId;
+                    item.DateUp = DateTime.Now;
+                    _appDbContext.CharacteristicTimebuckets.Update(item);
+                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = Constant.ACTION_UPDATE,
+                        ApplicationName = Constant.NAMA_APLIKASI,
+                        Detail = "",
+                        Feature = "Time Bucket Characteristic",
+                        LogDate = DateTime.Now,
+                        Message = "Success",
+                        Module = "Master Data",
+                        ReferenceId = item.Id.ToString(),
+                        RoleId = _currentUserService.IdFungsi,
+                        RoleName = _currentUserService.IdFungsi,
+                        UserId = _currentUserService.UserId,
+                        UserName = _currentUserService.UserName,
+                    });
+                }
                 #endregion
                 #region Added
-                var checkDataWillBeAdded = await _appDbContext.Characteristics.Where(x => x.Id == timeBucket.CharacteristicTimebuckets.CharacteristicId && x.IsActive).FirstOrDefaultAsync();
-                if (checkDataWillBeAdded == null)
-                    throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, timeBucket.CharacteristicTimebuckets.CharacteristicId));
-                CharacteristicTimebucket timeBucketCharacteristic = new CharacteristicTimebucket
+                foreach (var sub in timeBucket.CharacteristicTimebuckets)
                 {
-                    CharacteristicId = timeBucket.CharacteristicTimebuckets.CharacteristicId,
-                    TimebucketId = timeBucket.Id,
-                    UsePercentage = timeBucket.CharacteristicTimebuckets.UsePercentage,
-                    DayRange = timeBucket.CharacteristicTimebuckets.DayRange,
-                    Percentage = timeBucket.CharacteristicTimebuckets.Percentage,
-                    UserIn = _currentUserService.UserId,
-                    DateIn = DateTime.Now,
-                    IsActive = true
-                };
-                _appDbContext.CharacteristicTimebuckets.Add(timeBucketCharacteristic);
-                await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                    var checkDataWillBeAdded = await _appDbContext.Characteristics.Where(x => x.Id == sub.CharacteristicId && x.IsActive).FirstOrDefaultAsync();
+                    if (checkDataWillBeAdded == null)
+                        throw new Exception(string.Format(Constant.MessageDataNotFound, Constant.Characteristic, sub.CharacteristicId));
+                }
+
+                foreach (var dataChar in timeBucket.CharacteristicTimebuckets)
                 {
-                    Id = Guid.NewGuid(),
-                    Action = Constant.ACTION_INSERT,
-                    ApplicationName = Constant.NAMA_APLIKASI,
-                    Detail = "",
-                    Feature = "Time Bucket Characteristic",
-                    LogDate = DateTime.Now,
-                    Message = "Success",
-                    Module = "Master Data",
-                    ReferenceId = timeBucketCharacteristic.Id.ToString(),
-                    RoleId = _currentUserService.IdFungsi,
-                    RoleName = _currentUserService.IdFungsi,
-                    UserId = _currentUserService.UserId,
-                    UserName = _currentUserService.UserName,
-                });
+                    CharacteristicTimebucket timeBucketCharacteristic = new CharacteristicTimebucket
+                    {
+                        CharacteristicId = dataChar.CharacteristicId,
+                        TimebucketId = timeBucket.Id,
+                        UsePercentage = dataChar.UsePercentage,
+                        DayRange = dataChar.DayRange,
+                        Percentage = dataChar.Percentage,
+                        UserIn = _currentUserService.UserId,
+                        DateIn = DateTime.Now,
+                        IsActive = true
+                    };
+                    _appDbContext.CharacteristicTimebuckets.Add(timeBucketCharacteristic);
+                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = Constant.ACTION_INSERT,
+                        ApplicationName = Constant.NAMA_APLIKASI,
+                        Detail = "",
+                        Feature = "Time Bucket Characteristic",
+                        LogDate = DateTime.Now,
+                        Message = "Success",
+                        Module = "Master Data",
+                        ReferenceId = timeBucketCharacteristic.Id.ToString(),
+                        RoleId = _currentUserService.IdFungsi,
+                        RoleName = _currentUserService.IdFungsi,
+                        UserId = _currentUserService.UserId,
+                        UserName = _currentUserService.UserName,
+                    });
+                }
+
+
+
 
                 #endregion
 

@@ -36,18 +36,18 @@ namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Update
 
         public async Task<Response<Unit>> Handle(UpdateTimeBucketCommand request, CancellationToken cancellationToken)
         {
-            var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
-            if (checkCode != null)
-                throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.TimeBucket, request.Code));
-
             var data = await _genericRepository.GetByIdAsync(request.Id);
             if (data == null)
                 throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.Id));
 
-            var isCharacteristicExist = await _characteristicRepository.GetByIdAsync(request.CharacteristicTimebuckets.CharacteristicId);
-            if (isCharacteristicExist is null)
-                throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.CharacteristicTimebuckets.CharacteristicId));
+            if (data.Code != request.Code)
+            {
+                var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code);
+                if (checkCode != null)
+                    throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.TimeBucket, request.Code));
+            }
            
+
             await _timeBucket.EditTimeBucket(request);
             return new Response<Unit>(Unit.Value) { StatusCode = (int)HttpStatusCode.OK };
         }

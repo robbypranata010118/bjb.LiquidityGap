@@ -42,11 +42,7 @@ namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Create
                 var checkCode = await _genericRepository.GetByPredicate(x => x.Code == request.Code && x.IsActive);
                 if (checkCode != null)
                     throw new ApiException(string.Format(Constant.MessageDataUnique, Constant.TimeBucket, request.Code));
-                var isCharacteristicExist = await _characteristicRepository.GetByIdAsync(request.CharacteristicTimebuckets.CharacteristicId);
-
-                if (isCharacteristicExist is null)
-                    throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.TimeBucket, request.CharacteristicTimebuckets.CharacteristicId));
-
+ 
                 var res = await _timeBucket.CreateTimeBucket(request);
                 if (res > 0)
                 {

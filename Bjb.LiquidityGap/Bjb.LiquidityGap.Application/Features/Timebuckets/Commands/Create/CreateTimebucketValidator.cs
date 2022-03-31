@@ -20,12 +20,12 @@ namespace Bjb.LiquidityGap.Application.Features.TimeBuckets.Commands.Create
               .MaximumLength(50).WithMessage("{PropertyName} maksimal 50 length");
             RuleFor(x => x.Sequence)
               .GreaterThan(0).WithMessage("{PropertyName} harus lebih besar dari 0");
-            RuleFor(x => x.CharacteristicTimebuckets.DayRange)
+            RuleFor(x => x.CharacteristicTimebuckets.FirstOrDefault().DayRange)
               .GreaterThan(0).WithMessage("{PropertyName} harus lebih besar dari 0");
-            RuleFor(x => x.CharacteristicTimebuckets.Percentage)
+            RuleFor(x => x.CharacteristicTimebuckets.FirstOrDefault().Percentage)
               .NotEmpty().WithMessage("{PropertyName} jika menggunakan persentase maka persentase tidak boleh kosong ")
               .GreaterThan(0).WithMessage("{PropertyName} harus lebih besar dari 0")
-              .When(x => x.CharacteristicTimebuckets.UsePercentage == true);
+              .When(x => x.CharacteristicTimebuckets.FirstOrDefault().UsePercentage == true);
 
         }
     }
