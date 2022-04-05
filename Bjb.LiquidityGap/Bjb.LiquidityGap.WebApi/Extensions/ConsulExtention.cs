@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Bjb.LiquidityGap.WebApi.Extensions
 {
@@ -19,7 +20,7 @@ namespace Bjb.LiquidityGap.WebApi.Extensions
             return services;
         }
 
-        public static IApplicationBuilder UseConsul(this IApplicationBuilder app)
+        public static IApplicationBuilder UseConsul(this IApplicationBuilder app, IConfiguration configuration)
         {
             var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
             var logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>().CreateLogger("ConsulExtention");
@@ -28,8 +29,8 @@ namespace Bjb.LiquidityGap.WebApi.Extensions
             {
                 ID = $"ApplicationService-Id",
                 Name = "ApplicationService",
-                Address = "localhost",
-                Port = 5001,
+                Address = "192.168.226.120",
+                Port = 80,
                 Tags = new string[] { "Application" , "NET5" }
             };
             logger.LogInformation("Register to consul");
