@@ -3,22 +3,22 @@
     {
       "UseServiceDiscovery": true,
       "DownstreamPathTemplate": "/api/v1/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "ServiceName": "ApplicationService",
-      "UpstreamPathTemplate": "/api/v1/{everything}",
+      "UpstreamPathTemplate": "/application/api/v1/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "ReRouteCaseSensitive": false,
       "SwaggerKey": "ApplicationService"
     },
     {
       "UseServiceDiscovery": true,
-      "DownstreamPathTemplate": "/api/v2/{everything}",
-      "DownstreamScheme": "https",
-      "ServiceName": "ApplicationService",
-      "UpstreamPathTemplate": "/api/v2/{everything}",
+      "DownstreamPathTemplate": "/api/v1/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "EngineService",
+      "UpstreamPathTemplate": "/engine/api/v1/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "ReRouteCaseSensitive": false,
-      "SwaggerKey": "ApplicationService"
+      "SwaggerKey": "EngineService"
     }
   ],
   "SwaggerEndpoints": [
@@ -31,17 +31,23 @@
             "Name": "ApplicationService",
             "Path": "/swagger/v1/swagger.json"
           }
-        },
-        {
-          "Name": "Application API",
-          "Version": "v2",
-          "Service": {
-            "Name": "ApplicationService",
-            "Path": "/swagger/v2/swagger.json"
-          }
         }
       ],
       "Key": "ApplicationService",
+      "TakeServersFromDownstreamService": true
+    },
+    {
+      "Config": [
+        {
+          "Name": "Engine API",
+          "Version": "v1",
+          "Service": {
+            "Name": "EngineService",
+            "Path": "openapi.json"
+          }
+        }
+      ],
+      "Key": "EngineService",
       "TakeServersFromDownstreamService": true
     }
   ],
