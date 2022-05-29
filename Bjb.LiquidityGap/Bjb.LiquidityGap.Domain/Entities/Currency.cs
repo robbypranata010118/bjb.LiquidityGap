@@ -1,4 +1,5 @@
 ﻿using Bjb.LiquidityGap.Domain.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         public string Name { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal Rate { get; set; }
+        public DateTime? SynchronizedAt { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]

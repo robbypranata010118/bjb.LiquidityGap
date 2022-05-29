@@ -13,11 +13,12 @@ namespace Bjb.LiquidityGap.Domain.Entities
     {
         [MaxLength(10)]
         public string SourceData { get; set; }
-        public TimeSpan BussDate { get; set; }
+        public DateTime? BussDate { get; set; }
         [MaxLength(10)]
         public string Sandi { get; set; }
         [Column(TypeName = "decimal(18,0)")]
         public decimal Nominal { get; set; }
+        public DateTime? MaturityDate { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]
