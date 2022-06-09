@@ -31,6 +31,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [ForeignKey("SheetItemParentId")]
         public virtual ICollection<SheetItem> SheetChildItems { get; set; }
         public virtual ICollection<SheetItemCharacteristic> SheetItemCharacteristics { get; set; }
+        public virtual ICollection<SheetItemTimebucket> SheetItemTimebuckets { get; set; }
         public virtual SheetItem SheetItemParent { get; set; }
     }
 }
