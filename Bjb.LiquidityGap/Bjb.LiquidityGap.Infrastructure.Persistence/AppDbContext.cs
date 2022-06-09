@@ -29,6 +29,7 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<SummarySource> SummarySources { get; set; }       
         public virtual DbSet<Timebucket> Timebuckets { get; set; }
+        public virtual DbSet<SheetItemTimebucket> SheetItemTimebuckets { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyBaseEntityConfiguration();
