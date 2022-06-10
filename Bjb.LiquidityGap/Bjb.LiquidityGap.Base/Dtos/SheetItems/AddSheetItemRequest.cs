@@ -17,6 +17,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItems
         public string Statement { get; set; }
         public bool IsManualInput { get; set; }
         public List<int> SheetItemCharacteristics { get; set; }
+        public List<int> SheetItemTimebuckets { get; set; }
 
     }
 }

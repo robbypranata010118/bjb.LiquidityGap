@@ -19,6 +19,7 @@ namespace Bjb.LiquidityGap.WebApi.Examples.SheetItem
                 Statement = "ya",
                 IsManualInput = true,
                 SheetItemCharacteristics = new List<int> {1,2},
+                SheetItemTimebuckets = new List<int> { 1, 2 },
             };
         }
     }

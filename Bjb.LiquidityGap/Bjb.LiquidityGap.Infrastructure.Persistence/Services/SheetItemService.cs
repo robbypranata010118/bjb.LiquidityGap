@@ -42,6 +42,10 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 var idNotExist = request.SheetItemCharacteristics.Except(checkCharacteriticId).ToList();
                 if (checkCharacteriticId.Count == 0)
                     throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.Characteristic, $"{String.Join(" dan ", idNotExist.Select(x => x.ToString()))}"));
+                var checkTimebucketId = await _appDbContext.Timebuckets.Where(x => request.SheetItemTimebuckets.Contains(x.Id)).Select(x => x.Id).ToListAsync();
+                var timeBucketIdNotExist = request.SheetItemTimebuckets.Except(checkCharacteriticId).ToList();
+                if (checkTimebucketId.Count == 0)
+                    throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.TimeBucket, $"{String.Join(" dan ", timeBucketIdNotExist.Select(x => x.ToString()))}"));
                 SheetItem sheetItem = new SheetItem
                 {
                     SubCategoryId = request.SubCategoryId,
@@ -61,6 +65,13 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                         DateIn = DateTime.Now,
                         IsActive = true,
                         CharacteristicId = x
+                    }).ToList(),
+                    SheetItemTimebuckets = checkTimebucketId.Select(x => new SheetItemTimebucket
+                    {
+                        UserIn = _currentUserService.UserId,
+                        DateIn = DateTime.Now,
+                        IsActive = true,
+                        TimebucketId = x
                     }).ToList()
                 };
                 await _appDbContext.SheetItems.AddAsync(sheetItem);
@@ -100,6 +111,10 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                 var sheetItemCharacteristics = await _appDbContext.SheetItemCharacteristics.Where(x => x.SheetItemId == sheetItem.Id).ToListAsync();
                 //should be 3 in here
                 var characteristicInRequest = sheetItem.SheetItemCharacteristics;
+
+                var sheetItemTimebuckets = await _appDbContext.SheetItemTimebuckets.Where(x => x.SheetItemId == sheetItem.Id).ToListAsync();
+                //should be 3 in here
+                var timebucketInRequest = sheetItem.SheetItemTimebuckets;
                 #region Delete
                 var dataWillBeDeleted = sheetItemCharacteristics.Select(x => x.CharacteristicId).Except(characteristicInRequest).ToList();
                 foreach (var item in sheetItemCharacteristics.Where(x => dataWillBeDeleted.Contains(x.CharacteristicId)))
@@ -115,6 +130,31 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                         ApplicationName = Constant.NAMA_APLIKASI,
                         Detail = "",
                         Feature = "Sheet Item Characteristic",
+                        LogDate = DateTime.Now,
+                        Message = "Success",
+                        Module = "Master Data",
+                        ReferenceId = item.Id.ToString(),
+                        RoleId = _currentUserService.IdFungsi,
+                        RoleName = _currentUserService.IdFungsi,
+                        UserId = _currentUserService.UserId,
+                        UserName = _currentUserService.UserName,
+                    });
+                }
+
+                var dataWillBeDeletedTimebucket = sheetItemTimebuckets.Select(x => x.TimebucketId).Except(timebucketInRequest).ToList();
+                foreach (var item in sheetItemTimebuckets.Where(x => dataWillBeDeletedTimebucket.Contains(x.TimebucketId)))
+                {
+                    item.IsActive = false;
+                    item.UserUp = _currentUserService.UserId;
+                    item.DateUp = DateTime.Now;
+                    _appDbContext.SheetItemTimebuckets.Update(item);
+                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = Constant.ACTION_UPDATE,
+                        ApplicationName = Constant.NAMA_APLIKASI,
+                        Detail = "",
+                        Feature = "Sheet Item Timebucket",
                         LogDate = DateTime.Now,
                         Message = "Success",
                         Module = "Master Data",
@@ -153,6 +193,39 @@ namespace Bjb.LiquidityGap.Infrastructure.Persistence.Services
                         Message = "Success",
                         Module = "Master Data",
                         ReferenceId = sheetItemCharacteristic.Id.ToString(),
+                        RoleId = _currentUserService.IdFungsi,
+                        RoleName = _currentUserService.IdFungsi,
+                        UserId = _currentUserService.UserId,
+                        UserName = _currentUserService.UserName,
+                    });
+                }
+
+                var dataWillBeAddedTimeBucket = timebucketInRequest.Except(sheetItemTimebuckets.Select(x => x.TimebucketId).ToList()).ToList();
+                foreach (var item in dataWillBeAddedTimeBucket)
+                {
+                    var checkDataWillBeAdded = await _appDbContext.Timebuckets.Where(x => x.Id == item && x.IsActive).FirstOrDefaultAsync();
+                    if (checkDataWillBeAdded == null)
+                        throw new Exception(String.Format(Constant.MessageDataNotFound, Constant.TimeBucket, item));
+                    SheetItemTimebucket sheetItemTimebucket = new SheetItemTimebucket
+                    {
+                        TimebucketId = item,
+                        SheetItemId = sheetItem.Id,
+                        UserIn = _currentUserService.UserId,
+                        DateIn = DateTime.Now,
+                        IsActive = true
+                    };
+                    _appDbContext.SheetItemTimebuckets.Add(sheetItemTimebucket);
+                    await _logService.InsertLog(new Base.Dtos.AuditTrails.AuditTrailRequest
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = Constant.ACTION_INSERT,
+                        ApplicationName = Constant.NAMA_APLIKASI,
+                        Detail = "",
+                        Feature = "Sheet Item Timebucket",
+                        LogDate = DateTime.Now,
+                        Message = "Success",
+                        Module = "Master Data",
+                        ReferenceId = sheetItemTimebucket.Id.ToString(),
                         RoleId = _currentUserService.IdFungsi,
                         RoleName = _currentUserService.IdFungsi,
                         UserId = _currentUserService.UserId,
