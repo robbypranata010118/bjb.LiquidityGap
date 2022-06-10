@@ -6,6 +6,7 @@ using Bjb.LiquidityGap.Base.Dtos.Currency;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic;
 using Bjb.LiquidityGap.Base.Dtos.SheetItems;
+using Bjb.LiquidityGap.Base.Dtos.SheetitemTimebucket;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Base.Dtos.TimeBuckets;
 using Bjb.LiquidityGap.Domain.Entities;
@@ -44,12 +45,15 @@ namespace Bjb.LiquidityGap.Application.Mappings
             .ForMember(dto => dto.DataSource, opt => opt.MapFrom(x => x.DataSource))
             .ForMember(dto => dto.SheetChildItems, opt => opt.MapFrom(x => x.SheetChildItems))
             .ForMember(dto => dto.SheetItemParent, opt => opt.MapFrom(x => x.SheetItemParent))
-            .ForMember(dto => dto.SheetItemCharacteristics, opt => opt.MapFrom(x => x.SheetItemCharacteristics));
+            .ForMember(dto => dto.SheetItemCharacteristics, opt => opt.MapFrom(x => x.SheetItemCharacteristics))
+            .ForMember(dto => dto.SheetItemTimebuckets, opt => opt.MapFrom(x => x.SheetItemTimebuckets));
 
 
 
             CreateMap<SheetItemCharacteristic, SheetItemCharacteristicResponse>()
             .ForMember(dto => dto.Characteristic, opt => opt.MapFrom(x => x.Characteristic));
+            CreateMap<SheetItemTimebucket, SheetItemTimebucketResponse>()
+            .ForMember(dto => dto.Timebucket, opt => opt.MapFrom(x => x.Timebucket));
             #endregion
 
             #region Characteristic

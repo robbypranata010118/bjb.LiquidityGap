@@ -17,7 +17,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [NotMapped]
         public string ModuleName { get; set; } = "Master Data";
         [NotMapped]
-        public string FeatureName { get; set; } = "Sheet Item";
+        public string FeatureName { get; set; } = "Sheet Item Timebucket";
         public virtual SheetItem SheetItem { get; set; }
         public virtual Timebucket Timebucket { get; set; }
     }

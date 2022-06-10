@@ -1,6 +1,7 @@
 ﻿using Bjb.LiquidityGap.Base.Dtos.Characteristics;
 using Bjb.LiquidityGap.Base.Dtos.DataSources;
 using Bjb.LiquidityGap.Base.Dtos.SheetItemCharacteriastic;
+using Bjb.LiquidityGap.Base.Dtos.SheetitemTimebucket;
 using Bjb.LiquidityGap.Base.Dtos.SubCategories;
 using Bjb.LiquidityGap.Domain.Entities;
 using System;
@@ -23,6 +24,7 @@ namespace Bjb.LiquidityGap.Base.Dtos.SheetItems
         public SubCategoryResponse SubCategory { get; set;   }
         public DataSourceResponse DataSource { get; set; }
         public List<SheetItemCharacteristicResponse> SheetItemCharacteristics { get; set; }
+        public List<SheetItemTimebucketResponse> SheetItemTimebuckets { get; set; }
         public string Characteristics { get; set; }
         public List<SheetItemSimpleResponse> SheetChildItems { get; set; }
         public string UserIn { get; set; }

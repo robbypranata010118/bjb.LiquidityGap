@@ -32,7 +32,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Queries.Get
 
         public async Task<PagedResponse<IEnumerable<SheetItemResponse>>> Handle(GetSheetItemQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
+            var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SheetItemTimebuckets.Timebucket", "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
             var data = await _genericRepository.GetPagedReponseAsync(request, includes);
             var dataVm = _mapper.Map<IEnumerable<SheetItemResponse>>(data.Results);
             return new PagedResponse<IEnumerable<SheetItemResponse>>(dataVm, data.Info, request.Page, request.Length)
