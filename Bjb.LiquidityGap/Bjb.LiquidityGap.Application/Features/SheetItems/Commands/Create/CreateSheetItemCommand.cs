@@ -57,7 +57,7 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Commands.Create
                     if (isDataSourceExist == null)
                         throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.DataSource, request.DataSourceId));
                 }
-                if (request.SheetItemParentId > 0 && request.SheetItemParentId != null)
+                if (request.SheetItemParentId >= 0 && request.SheetItemParentId != null)
                 {
                     var checkSheetParent = await _genericRepository.GetByPredicate(x => x.Id == request.SheetItemParentId);
                     if (checkSheetParent == null)

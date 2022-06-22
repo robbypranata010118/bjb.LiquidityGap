@@ -14,7 +14,7 @@ namespace Bjb.LiquidityGap.WebApi.Examples.SheetItem
                 Code = "C1",
                 SubCategoryId = 1,
                 DataSourceId = 1,
-                SheetItemParentId = 0,
+                SheetItemParentId = null,
                 MarkToCalculate = true,
                 Statement = "ya",
                 IsManualInput = true,
