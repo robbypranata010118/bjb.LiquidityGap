@@ -33,7 +33,11 @@ namespace Bjb.LiquidityGap.Application.Features.SheetItems.Queries.GetById
 
         public async Task<Response<SheetItemResponse>> Handle(GetSheetItemByIdQuery request, CancellationToken cancellationToken)
         {
-            var includes = new string[] { "SheetItemCharacteristics.Characteristic", "SheetItemTimebuckets.Timebucket", "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
+            var includes = new string[] { 
+                "SheetItemCharacteristics.Characteristic", 
+                "SheetItemTimebuckets.Timebucket", 
+                "SheetItemCharacteristics.Characteristic.CharacteristicFormulas", 
+                "SubCategory.Category", "SubCategory", "DataSource", "SheetChildItems", "SheetItemParent" };
             var data = await _genericRepository.GetByIdAsync(request.Id, "Id", includes);
             if (data == null)
                 throw new ApiException(string.Format(Constant.MessageDataNotFound, Constant.SheetItem, request.Id));
