@@ -14,10 +14,17 @@ namespace Bjb.LiquidityGap.Domain.Entities
         public int LiquidityGapId { get; set; }
         [ForeignKey(nameof(Timebucket))]
         public int TimeBucketId { get; set; }
-        public float ActualPercentage { get; set; }
+        [Column(TypeName = "decimal(20,4)")]
+        public decimal ActualNominal { get; set; }
+        public float? ActualPercentage { get; set; }
         public string ActualCalc { get; set; }
+        [Column(TypeName = "decimal(20,4)")]
+        public decimal? ScenarioNominal { get; set; }
         public string ScenarioCalc { get; set; }
-        public float ScenarioPercentage { get; set; }
+        public float? ScenarioPercentage { get; set; }
+        [Column(TypeName = "decimal(20,4)")]
+        public decimal? ProporsiNominal { get; set; }
+        public float? ProporsiPercentage { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Transactional";
         [NotMapped]

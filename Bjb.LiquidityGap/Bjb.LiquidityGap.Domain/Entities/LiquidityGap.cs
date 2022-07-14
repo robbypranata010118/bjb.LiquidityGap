@@ -11,10 +11,12 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [ForeignKey(nameof(SheetItem))]
         public int SheetItemId { get; set; }
         public string Currency { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(20,4)")]
         public decimal Nominal { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal ScenarioNominal { get; set; }
+        [Column(TypeName = "decimal(20,4)")]
+        public decimal? ScenarioNominal { get; set; }
+        [Column(TypeName = "decimal(20,4)")]
+        public decimal? ProposionalNominal { get; set; }
         [NotMapped]
         public string ModuleName { get; set; } = "Transactional";
         [NotMapped]

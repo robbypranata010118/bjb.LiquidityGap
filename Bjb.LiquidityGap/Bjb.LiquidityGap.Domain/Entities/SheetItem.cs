@@ -20,6 +20,7 @@ namespace Bjb.LiquidityGap.Domain.Entities
         [ForeignKey(nameof(SheetItemParent))]
         public int? SheetItemParentId { get; set; }
         public bool MarkToCalculate { get; set; }
+        public bool SummaryToBucket { get; set; }
         public string Statement { get; set; }
         public bool IsManualInput { get; set; }
         [NotMapped]
